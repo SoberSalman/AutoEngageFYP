@@ -981,19 +981,19 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
         
         # Start the information collection agent thread
         threading.Thread(
-            target=run_chat_agent,
-            args=(
-                mouth, 
-                ear, 
-                chatbot, 
-                minibot_args, 
-                True,  # verbose
-                lambda x: False,  # stopping_criteria
-                True,  # starting_message
-                "chat_log.txt",  # logging_path
-                save_path  # save_path for collected information
-            )
-        ).start()
+        target=run_chat_agent,
+        args=(
+            mouth, 
+            ear, 
+            chatbot, 
+            minibot_args, 
+            True,  # verbose
+            lambda x: False,  # stopping_criteria
+            True,  # starting_message
+            "chat_log.txt",  # logging_path
+            save_path  # save_path for collected information
+        )
+    ).start()
     else:
         # Use regular chat for non-information agents
         threading.Thread(
