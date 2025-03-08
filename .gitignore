@@ -1,2 +1,6 @@
 schema.db
 response_times.log
+en_US-ryan-high.onnx
+en_US-ryan-high.onnx.json
+en_US-ryan-medium.onnx
+en_US-ryan-medium.onnx.json
