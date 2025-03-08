@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Agent</title>
+        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <style>
+            .required-asterisk {
+                color: var(--red-brand);
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper is--home">
+            <div class="navbar">
+                <a href="/" class="navbar-brand">
+                    <h1>autoengage</h1>
+                </a>
+                <div class="button-container">
+                    <button type="button" class="action1-button" onclick="redirectToUserDashboard()">Dashboard</button>
+                    <button type="button" class="action2-button" onclick="redirectToLogin()">Logout</button>
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">CREATE AGENT</div>
+                <div class="section-content">
+                    <form id="agentForm" method="post" action="/create-agent">
+                        <div class="form-group">
+                            <label for="agent_name">Agent Name <span class="required-asterisk">*</span></label>
+                            <input type="text" class="form-control" id="agent_name" name="agent_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="agent_function">Function of Agent <span class="required-asterisk">*</span></label>
+                            <select class="form-control" id="agent_function" name="agent_function" required>
+                                <option value="" disabled selected>Select Function</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Support">Support</option>
+                                <option value="Information">Information Collection</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="info_collection_notice" style="display:none;">
+                            <div class="alert alert-info">
+                                <strong>Information Collection Mode:</strong> This agent will be configured to collect customer information including name, age, city, zipcode, and interest level. Collected information will be saved to a CSV file.
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="forwarding_criteria">Criteria for Forwarding Calls</label>
+                            <textarea class="form-control" id="forwarding_criteria" name="forwarding_criteria" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Departments to Forward To:</label><br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="sales" name="departments" value="Sales">
+                                <label class="form-check-label" for="sales">Sales</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="technical_support" name="departments" value="Technical Support">
+                                <label class="form-check-label" for="technical_support">Technical Support</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="customer_service" name="departments" value="Customer Service">
+                                <label class="form-check-label" for="customer_service">Customer Service</label>
+                            </div>
+
+                            <input type="text" class="form-control mt-2" id="other_department" name="other_department" placeholder="Other (Specify)">
+                        </div>
+                        <hr class="custom-hr">
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="use_elevenlabs" name="use_elevenlabs">
+                                <label class="custom-control-label" for="use_elevenlabs">Use ElevenLabs STT</label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="voice_id_group" style="display:none;">
+                            <label for="voice_id">Voice ID</label>
+                            <select class="form-control" id="voice_id" name="voice_id"></select>
+                        </div>
+                        <button type="submit" class="action3-button">Create Agent</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function redirectToUserDashboard() {
+                window.location.href = '/user-dashboard';
+            }
+
+            function redirectToLogin() {
+                window.location.href = '/login';
+            }
+        </script>        
+        <script>
+            const ELEVENLABS_VOICE_IDS = {
+                "Adam: Male, American, Middle-aged, Deep": "pNInz6obpgDQGcFmaJgB",
+                "Alice: Female, British, Middle-aged, Confident": "Xb7hH8MSUJpSbSDYk0k2",
+                "Antoni: Male, American, Young, Well-rounded": "ErXwobaYiN019PkySvjV",
+                "Arnold: Male, American, Middle-aged, Crisp": "VR6AewLTigWG4xSOukaG",
+                "Bill: Male, American, Old, Trustworthy": "pqHfZKP75CvOlQylNhV4",
+                "Brian: Male, American, Middle-aged, Deep": "nPczCjzI2devNBz1zQrb",
+                "Callum: Male, Transatlantic, Middle-aged, Intense": "N2lVS1w4EtoT3dr4eOWO",
+                "Charlie: Male, Austrailian, Middle-aged, Natural": "IKne3meq5aSn9XLyUdCD",
+                "Charlotte: Female, Swedish, Young, Seductive": "XB0fDUnXU5powFXDhCwa",
+                "Chris: Male, American, Middle-aged, Casual": "iP95p4xoKVk53GoZ742B",
+                "Clyde: Male, American, Middle-aged, War veteran": "2EiwWnXFnvU5JabPnv8n",
+                "Daniel: Male, British, Middle-aged, Authoritative": "onwK4e9ZLuTAKqWW03F9",
+                "Dave: Male, British, Young, Conversational": "CYw3kZ02Hs0563khs1Fj",
+                "Domi: Female, American, Young, Strong": "AZnzlk1XvdvUeBnXmlld",
+                "Dorothy: Female, British, Young, Pleasant": "ThT5KcBeYPX3keUQqHPh",
+                "Drew: Male, American, Middle-aged, Well-rounded": "29vD33N1CtxCmqQRPOHJ",
+                "Elli: Female, American, Young, Emotional": "MF3mGyEYCl7XYWbV9V6O",
+                "Emily: Female, American, Young, Calm": "LcfcDJNUP1GQjkzn1xUU",
+                "Eric: Male, American, Middle-aged, Friendly": "cjVigY5qzO86Huf0OWal",
+                "Ethan: Male, American, Young, Soft": "g5CIjZEefAph4nQFvHAz",
+                "Fin: Male, Irish, Old, Sailor": "D38z5RcWu1voky8WS1ja",
+                "Freya: Female, American, Young, Expressive": "jsCqWAovK2LkecY7zXl4",
+                "George: Male, British, Middle-aged, Warm": "JBFqnCBsd6RMkjVDRZzb",
+                "Gigi: Female, American, Young, Childish": "jBpfuIE2acCO8z3wKNLl",
+                "Giovanni: Male, Italian, Young, Foreigner": "zcAOhNBS3c14rBihAFp1",
+                "Glinda: Female, American, Middle-aged, Witch": "z9fAnlkpzviPz146aGWa",
+                "Grace: Female, American (South), Young, Pleasant": "oWAxZDx7w5VEj9dCyTzz",
+                "Harry: Male, American, Young, Anxious": "SOYHLrjzK2X1ezoPC6cr",
+                "James: Male, Australian, Old, Calm": "ZQe5CZNOzWyzPSCn5a3c",
+                "Jeremy: Male, Irish, Young, Excited": "bVMeCyTHy58xNoL34h3p",
+                "Jessica: Female, American, Young, Expressive": "cgSgspJ2msm6clMCkdW9",
+                "Jessie: Male, American, Old, Raspy": "t0jbNlBVZ17f02VDIeMI",
+                "Joseph: Male, British, Middle-aged, Articulate": "Zlb1dXrM653N07WRdFW3",
+                "Josh: Male, American, Young, Deep": "TxGEqnHWrfWFTfGW9XjX",
+                "Laura: Female, American, Young, Upbeat": "FGY2WhTYpPnrIDTdsKH5",
+                "Liam: Male, American, Young, Articulate": "TX3LPaxmHKxFdv7VOQHJ",
+                "Lily: Female, British, Middle-aged, Warm": "pFZP5JQG7iQjIQuC4Bku",
+                "Matilda: Female, American, Middle-aged, Friendly": "XrExE9yKIg1WjnnlVkGX",
+                "Michael: Male, American, Old, Calm": "flq6f7yk4E4fJM5XTYuZ",
+                "Mimi: Female, Swedish, Young, Childish": "zrHiDhphv9ZnVXBqCLjz",
+                "Nicole: Female, American, Young, Soft": "piTKgcLEGmPE4e6mEKli",
+                "Patrick: Male, American, Middle-aged, Shouty": "ODq5zmih8GrVes37Dizd",
+                "Paul: Male, American, Middle-aged, Authoritative": "5Q0t7uMcjvnagumLfvZi",
+                "Rachel: Female, American, Young, Calm": "21m00Tcm4TlvDq8ikWAM",
+                "Sam: Male, American, Young, Raspy": "yoZ06aMxZJJ28mfd3POQ",
+                "Sarah: Female, American, Young, Soft: ": "EXAVITQu4vr4xnSDxMaL",
+                "Serena: Female, American, Middle-aged, Pleasant": "pMsXgVXv3BLzUgSXRplE",
+                "Thomas: Male, American, Young, Calm": "GBv7mTt0atIp3Br8iCZE",
+                "Will: Male, American, Young, Friendly": "bIHbv24MWmeRgasZH58o",
+            };
+
+            const voiceSelect = document.getElementById('voice_id');
+
+            for (const [name, id] of Object.entries(ELEVENLABS_VOICE_IDS)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = name;
+                voiceSelect.appendChild(option);
+            }
+        </script>
+        <script>
+            document.getElementById("use_elevenlabs").addEventListener("change", function() {
+                var voiceIdGroup = document.getElementById("voice_id_group");
+                if (this.checked) {
+                    voiceIdGroup.style.display = "block";
+                } else {
+                    voiceIdGroup.style.display = "none";
+                }
+            });
+        </script>
+        <script>
+            document.querySelector('#agentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const voiceIdInput = document.getElementById("voice_id").value.trim();
+
+                const ELEVENLABS_VOICE_IDS = {
+                    "Adam: Male, American, Middle-aged, Deep": "pNInz6obpgDQGcFmaJgB",
+                    "Alice: Female, British, Middle-aged, Confident": "Xb7hH8MSUJpSbSDYk0k2",
+                    "Antoni: Male, American, Young, Well-rounded": "ErXwobaYiN019PkySvjV",
+                    "Arnold: Male, American, Middle-aged, Crisp": "VR6AewLTigWG4xSOukaG",
+                    "Bill: Male, American, Old, Trustworthy": "pqHfZKP75CvOlQylNhV4",
+                    "Brian: Male, American, Middle-aged, Deep": "nPczCjzI2devNBz1zQrb",
+                    "Callum: Male, Transatlantic, Middle-aged, Intense": "N2lVS1w4EtoT3dr4eOWO",
+                    "Charlie: Male, Austrailian, Middle-aged, Natural": "IKne3meq5aSn9XLyUdCD",
+                    "Charlotte: Female, Swedish, Young, Seductive": "XB0fDUnXU5powFXDhCwa",
+                    "Chris: Male, American, Middle-aged, Casual": "iP95p4xoKVk53GoZ742B",
+                    "Clyde: Male, American, Middle-aged, War veteran": "2EiwWnXFnvU5JabPnv8n",
+                    "Daniel: Male, British, Middle-aged, Authoritative": "onwK4e9ZLuTAKqWW03F9",
+                    "Dave: Male, British, Young, Conversational": "CYw3kZ02Hs0563khs1Fj",
+                    "Domi: Female, American, Young, Strong": "AZnzlk1XvdvUeBnXmlld",
+                    "Dorothy: Female, British, Young, Pleasant": "ThT5KcBeYPX3keUQqHPh",
+                    "Drew: Male, American, Middle-aged, Well-rounded": "29vD33N1CtxCmqQRPOHJ",
+                    "Elli: Female, American, Young, Emotional": "MF3mGyEYCl7XYWbV9V6O",
+                    "Emily: Female, American, Young, Calm": "LcfcDJNUP1GQjkzn1xUU",
+                    "Eric: Male, American, Middle-aged, Friendly": "cjVigY5qzO86Huf0OWal",
+                    "Ethan: Male, American, Young, Soft": "g5CIjZEefAph4nQFvHAz",
+                    "Fin: Male, Irish, Old, Sailor": "D38z5RcWu1voky8WS1ja",
+                    "Freya: Female, American, Young, Expressive": "jsCqWAovK2LkecY7zXl4",
+                    "George: Male, British, Middle-aged, Warm": "JBFqnCBsd6RMkjVDRZzb",
+                    "Gigi: Female, American, Young, Childish": "jBpfuIE2acCO8z3wKNLl",
+                    "Giovanni: Male, Italian, Young, Foreigner": "zcAOhNBS3c14rBihAFp1",
+                    "Glinda: Female, American, Middle-aged, Witch": "z9fAnlkpzviPz146aGWa",
+                    "Grace: Female, American (South), Young, Pleasant": "oWAxZDx7w5VEj9dCyTzz",
+                    "Harry: Male, American, Young, Anxious": "SOYHLrjzK2X1ezoPC6cr",
+                    "James: Male, Australian, Old, Calm": "ZQe5CZNOzWyzPSCn5a3c",
+                    "Jeremy: Male, Irish, Young, Excited": "bVMeCyTHy58xNoL34h3p",
+                    "Jessica: Female, American, Young, Expressive": "cgSgspJ2msm6clMCkdW9",
+                    "Jessie: Male, American, Old, Raspy": "t0jbNlBVZ17f02VDIeMI",
+                    "Joseph: Male, British, Middle-aged, Articulate": "Zlb1dXrM653N07WRdFW3",
+                    "Josh: Male, American, Young, Deep": "TxGEqnHWrfWFTfGW9XjX",
+                    "Laura: Female, American, Young, Upbeat": "FGY2WhTYpPnrIDTdsKH5",
+                    "Liam: Male, American, Young, Articulate": "TX3LPaxmHKxFdv7VOQHJ",
+                    "Lily: Female, British, Middle-aged, Warm": "pFZP5JQG7iQjIQuC4Bku",
+                    "Matilda: Female, American, Middle-aged, Friendly": "XrExE9yKIg1WjnnlVkGX",
+                    "Michael: Male, American, Old, Calm": "flq6f7yk4E4fJM5XTYuZ",
+                    "Mimi: Female, Swedish, Young, Childish": "zrHiDhphv9ZnVXBqCLjz",
+                    "Nicole: Female, American, Young, Soft": "piTKgcLEGmPE4e6mEKli",
+                    "Patrick: Male, American, Middle-aged, Shouty": "ODq5zmih8GrVes37Dizd",
+                    "Paul: Male, American, Middle-aged, Authoritative": "5Q0t7uMcjvnagumLfvZi",
+                    "Rachel: Female, American, Young, Calm": "21m00Tcm4TlvDq8ikWAM",
+                    "Sam: Male, American, Young, Raspy": "yoZ06aMxZJJ28mfd3POQ",
+                    "Sarah: Female, American, Young, Soft: ": "EXAVITQu4vr4xnSDxMaL",
+                    "Serena: Female, American, Middle-aged, Pleasant": "pMsXgVXv3BLzUgSXRplE",
+                    "Thomas: Male, American, Young, Calm": "GBv7mTt0atIp3Br8iCZE",
+                    "Will: Male, American, Young, Friendly": "bIHbv24MWmeRgasZH58o",
+                };
+
+                if (document.getElementById("use_elevenlabs").checked && Object.values(ELEVENLABS_VOICE_IDS).includes(voiceIdInput)) {
+                    const voiceName = Object.keys(ELEVENLABS_VOICE_IDS).find(key => ELEVENLABS_VOICE_IDS[key] === voiceIdInput);
+                    const name = voiceName.split(' ')[0].replace(/:.*/, '');;
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ElevenLabs Enabled',
+                        text: `The selected voice "${name}" with voice ID "${voiceIdInput}" will be used.`,
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+                        this.submit();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ElevenLabs Disabled',
+                        text: `The default voice will be used.`,
+                        confirmButtonText: 'Okay'
+                    }).then(() => {
+                        this.submit();
+                    });
+                }
+            });
+        </script>
+        <script>
+            // Show/hide the information collection notice based on selection
+            document.getElementById("agent_function").addEventListener("change", function() {
+                var infoNotice = document.getElementById("info_collection_notice");
+                if (this.value === "Information") {
+                    infoNotice.style.display = "block";
+                } else {
+                    infoNotice.style.display = "none";
+                }
+            });
+        </script>
+    </body>
+</html>

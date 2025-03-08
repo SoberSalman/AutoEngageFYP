@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up</title>
+        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <style>
+            .required-asterisk {
+                color: var(--red-brand);
+                font-weight: bold;
+            }
+
+            .login-redirect {
+                font-size: 1vw;
+                text-align: left;
+            }
+
+            .login-redirect p {
+                color: var(--white-brand);
+            }
+
+            .login-redirect a {
+                color: var(--yellow-brand);
+            }
+
+            .login-redirect a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper is--home">
+            <div class="navbar">
+                <a href="/" class="navbar-brand">
+                    <h1>autoengage</h1>
+                </a>
+                <div class="button-container">
+                    <button type="submit" class="action2-button" onclick="redirectToHomePage()">Go Back</button>
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">SIGN UP</div>
+                <div class="section-content">
+                    <form id="signupForm" method="post" action="/signup">
+                        <div class="form-group">
+                            <label for="name">Name <span class="required-asterisk">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required-asterisk">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="+1 123-456-7890">
+                        </div>
+                        <hr class="custom-hr">
+                        <div class="form-group">
+                            <label for="username">Username <span class="required-asterisk">*</span></label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password <span class="required-asterisk">*</span></label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password <span class="required-asterisk">*</span></label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <button type="submit" class="action3-button">Sign Up</button>
+                    </form>
+                    <br>
+                    <div class="login-redirect">
+                        <p>Already have an account? <a href="/login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function redirectToHomePage() {
+                window.location.href = '/';
+            }
+
+            document.getElementById('signupForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                fetch("/signup", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.response,
+                                confirmButtonText: 'Okay',
+                            }).then(() => {
+                                window.location.href = "/login";
+                            });
+                        } else if (data.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.error,
+                                confirmButtonText: 'Try Again',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Unexpected Error',
+                            text: 'Something went wrong. Please try again later.',
+                            confirmButtonText: 'Okay',
+                        });
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+    </body>
+</html>
