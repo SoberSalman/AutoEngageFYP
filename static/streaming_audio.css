@@ -1,0 +1,98 @@
+@font-face {
+    font-family: 'FutureBold';
+    src: url('../static/fonts/FutureBold.ttf') format('truetype');
+}
+
+:root {
+    --black-brand: #121316;
+    --white-brand: #ededed;
+    --yellow-brand: #fff250;
+}
+
+body {
+    background-attachment: fixed;
+    background-color: var(--black-brand);
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: auto;
+    position: relative;
+}
+
+.navbar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar h1 {
+    color: var(--white-brand);
+    font-family: "FutureBold", sans-serif;
+    font-size: 3vw;
+}
+
+.navbar .button-container {
+    align-items: center;
+    display: flex;
+}
+
+.redirect-button {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    border-radius: 1.25vw;
+    color: var(--white-brand);
+    cursor: pointer;
+    font-size: 1vw;
+    margin-left: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.redirect-button:hover {
+    border-color: var(--yellow-brand);
+    color: var(--yellow-brand);
+}
+
+.logout-button {
+    background-color: var(--yellow-brand);
+    border: 0.07vw solid var(--yellow-brand);
+    border-radius: 1.25vw;
+    color: var(--black-brand);
+    cursor: pointer;
+    font-size: 1vw;
+    margin-left: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+}
+
+.logout-button:hover {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    color: var(--yellow-brand);
+}
+
+p {
+    color: var(--white-brand);
+}
+
+#canvas {
+    height: 400px;
+    margin-top: 20%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+#startButton {
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 9em;
+    font-size: 2vw;
+    left: 50%;
+    margin-top: 20%;
+    padding: 0.5em 1.5em;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%,-50%,0);
+}

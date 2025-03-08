@@ -1,0 +1,150 @@
+@font-face {
+    font-family: 'FutureBold';
+    src: url('../static/fonts/FutureBold.ttf') format('truetype');
+}
+
+:root {
+    --black-brand: #121316;
+    --red-brand: #c8464b;
+    --white-brand: #ededed;
+    --yellow-brand: #fff250;
+}
+
+body {
+    background-attachment: fixed;
+    background-color: var(--black-brand);
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: auto;
+    position: relative;
+}
+
+.navbar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    text-decoration: none;
+}
+
+.navbar-brand h1 {
+    color: var(--white-brand);
+    font-family: "FutureBold", sans-serif;
+    font-size: 3vw;
+}
+
+.navbar .button-container {
+    align-items: center;
+    display: flex;
+}
+
+.action1-button {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    border-radius: 1.25vw;
+    color: var(--white-brand);
+    cursor: pointer;
+    font-size: 1vw;
+    margin-left: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.action1-button:hover {
+    border-color: var(--yellow-brand);
+    color: var(--yellow-brand);
+}
+
+.action2-button {
+    background-color: var(--yellow-brand);
+    border: 0.07vw solid var(--yellow-brand);
+    border-radius: 1.25vw;
+    color: var(--black-brand);
+    cursor: pointer;
+    font-size: 1vw;
+    margin-left: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+}
+
+.action2-button:hover {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    color: var(--yellow-brand);
+}
+
+.action3-button {
+    background-color: var(--yellow-brand);
+    border: 0.07vw solid var(--yellow-brand);
+    border-radius: 1.25vw;
+    color: var(--black-brand);
+    cursor: pointer;
+    margin-top: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+}
+
+.action3-button:hover {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    color: var(--yellow-brand);
+}
+
+.action4-button {
+    background-color: var(--yellow-brand);
+    border: 0.07vw solid var(--yellow-brand);
+    border-radius: 1.25vw;
+    color: var(--black-brand);
+    cursor: pointer;
+    margin-top: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+}
+
+.action4-button:hover {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    color: var(--yellow-brand);
+}
+
+.section-container {
+    background-color: rgb(18, 19, 22, 0.75);
+    border-color: rgba(255, 242, 80, 0.5);
+    border-radius: 2vw;
+    box-shadow: 0 0 0.7vw rgba(255, 242, 80, 0.75);
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    margin-bottom: 2%;
+    margin-left: 25%;
+    margin-top: 2%;
+    padding: 2vw;
+    width: 50%;
+}
+
+.section-header {
+    color: var(--white-brand);
+    font-size: 3vw;
+    margin-bottom: 1vw;
+    text-align: center;
+}
+
+.section-content {
+    color: var(--white-brand);
+    font-size: 1vw;
+}
+
+.custom-hr {
+    background: var(--white-brand);
+    border: 0;
+    height: 0.07vw;
+    margin-top: 2vw;
+}
+
+#checkbox-error {
+    text-decoration: none;
+}

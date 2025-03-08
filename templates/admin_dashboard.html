@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
+        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <style>
+            ul {
+                color: var(--white-brand);
+                list-style-type: none;
+            }
+
+            ul li {
+                color: #ffd500;
+            }
+
+            ul ul {
+                margin-left: 1.25vw;
+            }
+
+            ul ul li {
+                color: #ffe761;
+            }
+
+            ul ul ul li {
+                color: #fff394;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper is--home">
+            <div class="navbar">
+                <a href="/" class="navbar-brand">
+                    <h1>autoengage</h1>
+                </a>
+                <div class="button-container">
+                    <button type="submit" class="action2-button" onclick="redirectToLogin()">Logout</button>
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">USERS</div>
+                <div class="section-content">
+                    {% if users %}
+                    <ul>
+                        {% for user in users %}
+                        <li>{{ user.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Users Available</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">ORGANIZATIONS</div>
+                <div class="section-content">
+                    {% if organizations %}
+                    <ul>
+                        {% for organization in organizations %}
+                        <li>{{ organization.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Organizations Available</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">TEAMS</div>
+                <div class="section-content">
+                    {% if organizations %}
+                    <ul>
+                        {% for organization in organizations %}
+                        <li>
+                            {{ organization.name }}
+                            <ul>
+                                {% if teams[organization.name] %}
+                                {% for team in teams[organization.name] %}
+                                <li>{{ team.name }}</li>
+                                {% endfor %}
+                                {% else %}
+                                <li style="color: #c8464b;">No Teams Available for this Organization</li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Teams Available</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">AGENTS</div>
+                <div class="section-content">
+                    {% if organizations %}
+                    <ul>
+                        {% for organization in organizations %}
+                        <li>
+                            {{ organization.name }}
+                            <ul>
+                                {% if teams[organization.name] %}
+                                {% for team in teams[organization.name] %}
+                                <li>
+                                    {{ team.name }}
+                                    <ul>
+                                        {% if agents[organization.name][team.name] %}
+                                        {% for agent in agents[organization.name][team.name] %}
+                                        <li>{{ agent.name }}</li>
+                                        {% endfor %}
+                                        {% else %}
+                                        <li style="color: #c8464b;">No Agents Available for this Team</li>
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                                {% else %}
+                                <li style="color: #c8464b;">No Teams Available for this Organization</li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Agents Available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <br>
+        <script>
+            function redirectToLogin() {
+                window.location.href = '/login';
+            }
+        </script>
+    </body>
+</html>

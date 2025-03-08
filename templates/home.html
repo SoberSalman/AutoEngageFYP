@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Organization</title>
+        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <style>
+            .title {
+                color: var(--white-brand);
+                font-size: 2.5vw;
+                text-align: center;
+                margin-top: 2vw;
+            }
+
+            .title .highlight {
+                color: var(--yellow-brand);
+                font-size: 5vw;
+                font-family: "FutureBold", sans-serif;
+                text-shadow: 0.1vw 0.1vw 0.5vw rgba(0, 0, 0, 0.5);
+            }
+
+            .subtitle {
+                color: var(--white-brand);
+                font-size: 2vw;
+                margin-bottom: 2vw;
+                margin-top: 1vw;
+                text-align: center;
+            }
+
+            .subtitle .highlight {
+                color: var(--yellow-brand);
+                text-shadow: 0.1vw 0.1vw 0.5vw rgba(0, 0, 0, 0.5);
+            }
+
+            .description {
+                color: var(--white-brand);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.2vw;
+                margin: 2vw auto;
+            }
+
+            .description p {
+                color: var(--white-brand);
+                margin-bottom: 1vw;
+                text-align: justify;
+                max-width: 100%;
+            }
+
+            .description ul {
+                list-style-type: disc;
+                margin-left: 2vw;
+                margin-bottom: 2vw;
+                padding-left: 2vw;
+            }
+
+            .description li {
+                margin-bottom: 1vw;
+            }
+
+            .description li strong {
+                color: var(--yellow-brand);
+                font-weight: bold;
+            }
+
+            .video-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2vw;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            h3 {
+                color: var(--white-brand);
+                font-family: 'Courier New', Courier, monospace;
+                text-align: center;
+            }
+
+            video {
+                display: block;
+                margin: 0 auto;
+            }
+
+            .custom-hr {
+                background: var(--white-brand);
+                border: 0;
+                height: 0.07vw;
+                margin: 1vw 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper is--home">
+            <div class="navbar">
+                <a href="/" class="navbar-brand">
+                    <h1>autoengage</h1>
+                </a>
+                <div class="button-container">
+                    <button type="submit" class="action2-button" onclick="redirectToSignUp()">Sign Up</button>
+                    <button type="submit" class="action2-button" onclick="redirectToLogin()">Login</button>
+                </div>
+            </div>
+            <div class="title">Welcome to <span class="highlight">autoengage</span></div>
+            <div class="subtitle">Let <span class="highlight">AI</span> Take Your Calls!</div>
+            <div class="section-container">
+                <div class="description">
+                    <p>
+                        autoengage revolutionizes AI interaction with lightning-fast, natural voice conversations. Imagine chatting with an AI as easily as you would with a friend – that's the autoengage difference.
+                    </p>
+                    <ul>
+                        <li><strong>Seamless Communication:</strong>Near Real-time, conversations that feel truly human.</li>
+                        <li><strong>Infinitely Adaptable:</strong> Built on Python, autoengage integrates effortlessly with your preferred speech and language models.</li>
+                        <li><strong>Perfect for Business:</strong> Automate call operations without losing the personal touch.</li>
+                        <li><strong>User-Friendly:</strong> Intuitive AI engagement for tech enthusiasts and novices alike.</li>
+                        <li><strong>Cost-Effective:</strong> Maximize ROI with our scalable, efficient platform.</li>
+                        <li><strong>Limitless Potential:</strong> From customer service to personal assistants, autoengage adapts to your unique needs.</li>
+                    </ul>
+                    <p>Ditch restrictive proprietary solutions. Choose autoengage for a flexible, powerful AI conversation platform that grows with you.</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <script>
+            function redirectToSignUp() {
+                window.location.href = '/signup';
+            }
+            
+            function redirectToLogin() {
+                window.location.href = '/login';
+            }
+        </script>        
+    </body>
+</html>

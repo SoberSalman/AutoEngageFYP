@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/styles.css">
+        <style>
+            .required-asterisk {
+                color: var(--red-brand);
+                font-weight: bold;
+            }
+
+            .signup-redirect {
+                font-size: 1vw;
+                text-align: left;
+            }
+
+            .signup-redirect p {
+                color: var(--white-brand);
+            }
+
+            .signup-redirect a {
+                color: var(--yellow-brand);
+            }
+
+            .signup-redirect a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper is--home">
+            <div class="navbar">
+                <a href="/" class="navbar-brand">
+                    <h1>autoengage</h1>
+                </a>
+                <div class="button-container">
+                    <button type="submit" class="action2-button" onclick="redirectToHomePage()">Go Back</button>
+                </div>
+            </div>
+            <div class="section-container">
+                <div class="section-header">LOGIN</div>
+                <div class="section-content">
+                    <form id="loginForm" method="post" action="/login">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="action3-button">Login</button>
+                    </form>
+                    <br>
+                    <div class="signup-redirect">
+                        <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function redirectToHomePage() {
+                window.location.href = '/';
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                fetch("/login", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.response) {
+                            window.location.href = data.redirect_url;
+                        } else if (data.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.error,
+                                confirmButtonText: 'Try Again',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Unexpected Error',
+                            text: 'Something went wrong. Please try again later.',
+                            confirmButtonText: 'Okay',
+                        });
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+    </body>
+</html>

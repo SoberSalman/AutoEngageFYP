@@ -1,0 +1,135 @@
+@font-face {
+    font-family: 'FutureBold';
+    src: url('../static/fonts/FutureBold.ttf') format('truetype');
+}
+
+:root {
+    --black-brand: #121316;
+    --pink-brand: #ff00f2;
+    --white-brand: #ededed;
+    --yellow-brand: #fff250;
+}
+
+body {
+    background-attachment: fixed;
+    background-color: var(--black-brand);
+    background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0)), url("../static/images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+    position: relative;
+}
+
+.blob {
+    align-items: center;
+    background-image: linear-gradient(var(--yellow-brand) 50%, var(--pink-brand));
+    border-radius: 100%;
+    display: flex;
+    filter: blur(17vw);
+    height: 35vw;
+    justify-content: center;
+    left: 50%;
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 500ms ease-out;
+    width: 35vw;
+    z-index: -1;
+}
+
+.section-container {
+    background-color: rgb(0, 0, 0, 0.9);
+    border-color: rgba(255, 242, 80, 0.5);
+    border-radius: 2vw;
+    box-shadow: 0 0 0.7vw rgba(255, 242, 80, 0.75);
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    height: 90%;
+    justify-content: center;
+    margin-left: 40%;
+    margin-top: 10%;
+    padding: 2vw;
+    width: 20%;
+}
+
+.section-header {
+    color: var(--white-brand);
+    font-size: 1.5vw;
+    margin-bottom: 1vw;
+    text-align: center;
+}
+
+.section-content {
+    color: var(--white-brand);
+    font-size: 1vw;
+    align-items: center;
+}
+
+.login-button {
+    background-color: var(--yellow-brand);
+    border: 0.07vw solid var(--yellow-brand);
+    border-radius: 1.25vw;
+    color: var(--black-brand);
+    cursor: pointer;
+    margin-top: 1vw;
+    padding: 0.5vw 1.25vw;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+}
+
+.login-button:hover {
+    background-color: var(--black-brand);
+    border: 0.07vw solid var(--white-brand);
+    color: var(--yellow-brand);
+}
+
+.logo img {
+    width: 7vw;
+    height: auto;
+}
+
+.form_group {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.form_group input {
+    background-color: transparent;
+    border: 1px solid var(--white-brand);
+    border-radius: 1vw;
+    color: var(--white-color);
+    font-size: 1.25vw;
+    outline: none;
+    padding: 1.7vw 0.7vw 0.7vw 0.7vw;
+    width: 100%;
+    margin-bottom: 1vw;
+}
+
+.form_group input::placeholder {
+    opacity: 0;
+}
+
+.form_group input:focus {
+    outline: 1px solid var(--yellow-brand);
+}
+
+.form_group input:focus + label,
+.form_group input:not(:placeholder-shown) + label {
+    color: var(--yellow-brand);
+    font-size: 0.7vw;
+    top: 0.7vw;
+}
+
+.form_group label {
+    color: var(--white-brand);
+    font-size: 1.25;
+    left: 0.7vw;
+    position: absolute;
+    top: 1.4vw;
+    transition: .2s ease;
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Organization</title>
+    <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
+    <style>
+        .required-asterisk {
+            color: var(--red-brand);
+            font-weight: bold;
+        }
+
+        .add-product-button {
+            background-color: var(--yellow-brand);
+            border: 0.07vw solid var(--yellow-brand);
+            border-radius: 1.25vw;
+            color: var(--black-brand);
+            cursor: pointer;
+            margin-bottom: 1vw;
+            padding: 0.5vw 1.25vw;
+            transition: background-color 0.5s, border 0.5s, color 0.5s;
+        }
+
+        .add-product-button:hover {
+            background-color: var(--black-brand);
+            border: 0.07vw solid var(--white-brand);
+            color: var(--yellow-brand);
+        }
+
+        .remove-product-button {
+            background-color: var(--red-brand);
+            border: 0.07vw solid var(--red-brand);
+            border-radius: 1.25vw;
+            color: var(--black-brand);
+            cursor: pointer;
+            margin-top: 1vw;
+            padding: 0.5vw 1.25vw;
+            transition: background-color 0.5s, border 0.5s, color 0.5s;
+        }
+
+        .remove-product-button:hover {
+            background-color: var(--black-brand);
+            border: 0.07vw solid var(--white-brand);
+            color: var(--red-brand);
+        }
+
+        .loading {
+            display: none; /* Hidden by default */
+            margin-top: 1rem; /* Added space below the URL field */
+        }
+
+        #outputLink {
+            color: var(--yellow-brand); /* Assuming you have a CSS variable for yellow */
+            font-weight: lighter;
+        }
+
+        #outputLink:hover {
+            color: var(--white-brand); /* Change color on hover if needed */
+            font-weight: bold; /* Optional: Make the text bold */
+            text-decoration: underline; /* Optional: Underline the link */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper is--home">
+        <div class="navbar">
+            <a href="/" class="navbar-brand">
+                <h1>autoengage</h1>
+            </a>
+            <div class="button-container">
+                <button type="submit" class="action2-button" onclick="redirectToUserDashboard()">Dashboard</button>
+            </div>
+        </div>
+        <div class="section-container">
+            <div class="section-header">CREATE ORGANIZATION</div>
+            <div class="section-content">
+                <form id="organizationForm" method="post" action="/create-organization">
+                    <div class="form-group">
+                        <label for="organization_name">Organization Name <span class="required-asterisk">*</span></label>
+                        <input type="text" id="organization_name" name="organization_name" class="form-control" placeholder="Organization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization_description">Organization Description</label>
+                        <textarea id="organization_description" name="organization_description" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="target_audience">Target Audience</label>
+                        <input type="text" id="target_audience" name="target_audience" class="form-control">
+                    </div>
+                    <hr class="custom-hr">
+                    <div id="productsSection">
+                        <div class="form-group product-entry">
+                            <label for="product1">Product/Service 1</label>
+                            <input type="text" class="form-control mb-2" id="product1" name="product1" placeholder="Name" required>
+                            <textarea class="form-control mb-2" id="description1" name="description1" placeholder="Description" rows="2"></textarea>
+                            <textarea class="form-control mb-2" id="feature1" name="feature1" placeholder="Feature" rows="2"></textarea>
+                            <button type="button" class="remove-product-button" onclick="removeProduct(this)">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-product-button" id="addProductBtn">+</button>
+                    <div class="form-group">
+                        <label for="other_details">Other Details</label>
+                        <textarea class="form-control" id="other_details" name="other_details" rows="4"></textarea>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        <div style="flex: 3; margin-right: 10px;">
+                            <label for="website_url">Website URL</label>
+                            <input type="url" id="website_url" name="website_url" class="form-control" style="width: 100%;font-size: small;" value="http://www.yourwebsite.com">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="max_pages_to_crawl">Max Pgs. to Crawl</label>
+                            <input type="number" id="max_pages_to_crawl" name="max_pages_to_crawl" class="form-control" min="1" max="20" placeholder="Max Pages" value=5>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">Enter the URL of your organization's website. Note: You cannot create the organization until you crawl a website or clear this input.</small>
+                    <button type="button" class="add-product-button" id="crawlButton">Crawl Website</button>
+                </div>
+                    <div class="loading" id="loading" style="color:white">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span id="loadingText" style="margin-left: 20px; vertical-align: bottom; color: rgb(255, 255, 255);">Crawling through your website...</span>
+                    </div>
+                    <div id="outputLinkContainer" style="display: none; margin-top: 10px;">
+                        <a id="outputLink" href="#" target="_blank">View Crawled Output!</a>
+                    </div>                    
+                    <button type="submit" class="action3-button" id="createOrgButton">Create Organization</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("max_pages_to_crawl").addEventListener("input", function() {
+            const maxPagesInput = this.value.trim();
+            const maxPages = parseInt(maxPagesInput, 10);
+
+            // Validate the max pages input
+            if (maxPages < 1 || maxPages > 20) {
+                alert("Please enter a value between 1 and 20.");
+                this.value = ""; // Clear the input if invalid
+            }
+        });
+        document.getElementById("website_url").addEventListener("input", function() {
+            const websiteURL = this.value.trim();
+            const createOrgButton = document.getElementById("createOrgButton");
+            
+            // Enable the button only if the URL field is empty
+            createOrgButton.disabled = websiteURL.length > 0;
+        });
+
+        document.getElementById("crawlButton").onclick = function() {
+            const websiteURL = document.getElementById("website_url").value;
+            let maxPages = parseInt(document.getElementById("max_pages_to_crawl").value, 10);
+            document.getElementById("createOrgButton").disabled = true;
+            // Validate the URL
+            const urlPattern = /^(https?:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\- .\/?%&=]*)?[^\/\\]$/;
+            if (!websiteURL.trim() || !urlPattern.test(websiteURL)) {
+                alert("Please enter a valid website URL. Add http(s):// at the start and remove any forward or backward slashes at the end.");
+                return;
+            }
+
+            if (isNaN(maxPages) || maxPages < 1 || maxPages > 20) {
+                maxPages = 5;
+                document.getElementById("max_pages_to_crawl").value = maxPages;
+            }
+
+            // Show loading and set loading text
+            document.getElementById("loading").style.display = "flex";
+
+            // Loading text setup
+            const loadingTexts = [
+                "Traversing your organization's universe...",
+                "Exploring your digital realm...",
+                "Crawling the abyss...",
+                "Surveying your online presence...",
+                "Just a little longer..."
+            ];
+            let index = 0;
+            const loadingTextElement = document.getElementById("loadingText");
+            loadingTextElement.textContent = loadingTexts[index % loadingTexts.length];
+            
+            const loadingInterval = setInterval(() => {
+                loadingTextElement.textContent = loadingTexts[index % loadingTexts.length];
+                index++;
+            }, 2500);
+
+            // Hide the output link container
+            const outputLinkContainer = document.getElementById("outputLinkContainer");
+            outputLinkContainer.style.display = "none";
+
+            fetch('/update-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    url: websiteURL,
+                    maxPages: maxPages,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Config updated, starting crawl...");
+
+                    // Now start the crawler subprocess
+                    fetch('/start-crawl', {
+                        method: 'POST',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Crawl completed, fetching condensed output...");
+
+                            // After successful crawl, fetch the condensed output
+                            fetch('/condense-output', {
+                                method: 'GET',
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to fetch condensed output');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log("Condensed output fetched successfully");
+
+                                // Proceed with the remaining logic before stopping the loading
+                                const outputLink = document.getElementById("outputLink");
+                                outputLink.href = "/display-output"; // Adjust the link to your output file path
+                                outputLinkContainer.style.display = "block";
+                                document.getElementById("createOrgButton").disabled = false;
+
+                                // Now stop loading
+                                clearInterval(loadingInterval); // Clear the loading text interval
+                                document.getElementById("loading").style.display = "none";
+                            })
+                            .catch(error => {
+                                console.error('Error fetching condensed output:', error);
+                                clearInterval(loadingInterval); // Stop loading in case of error
+                                document.getElementById("loading").innerText = "An error occurred. Please try again.";
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        // Handle errors and hide loading text
+                        clearInterval(loadingInterval); // Clear the loading text interval
+                        document.getElementById("loading").innerText = "An error occurred. Please try again.";
+                        console.error('Error during crawl:', error);
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle errors and hide loading text
+                clearInterval(loadingInterval); // Clear the loading text interval
+                document.getElementById("loading").innerText = "An error occurred while updating the config. Please try again.";
+                console.error('Error updating config:', error);
+            });
+
+
+
+        };
+
+
+
+        // Function to add a new product entry
+        document.getElementById("addProductBtn").onclick = function() {
+            const productsSection = document.getElementById("productsSection");
+            const productCount = productsSection.getElementsByClassName("product-entry").length + 1;
+
+            const newProductEntry = document.createElement("div");
+            newProductEntry.classList.add("form-group", "product-entry");
+            newProductEntry.innerHTML = `
+                <label for="product${productCount}">Product/Service ${productCount}</label>
+                <input type="text" class="form-control mb-2" id="product${productCount}" name="product${productCount}" placeholder="Name">
+                <textarea class="form-control mb-2" id="description${productCount}" name="description${productCount}" placeholder="Description" rows="2"></textarea>
+                <textarea class="form-control mb-2" id="feature${productCount}" name="feature${productCount}" placeholder="Feature" rows="2"></textarea>
+                <button type="button" class="remove-product-button" onclick="removeProduct(this)">-</button>
+            `;
+            productsSection.appendChild(newProductEntry);
+        };
+
+        // Function to remove a product entry
+        function removeProduct(button) {
+            const productEntry = button.closest(".product-entry");
+            productEntry.remove();
+        }
+
+
+
+        
+    </script>
+</body>
+</html>

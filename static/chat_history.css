@@ -1,0 +1,37 @@
+body {
+    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+   
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.message:last-child {
+    border-bottom: none;
+}
+
+.role-system {
+    background-color: #e0f7fa;
+}
+
+.role-user {
+    background-color: #fff9c4;
+}
+
+.role-assistant {
+    background-color: #c8e6c9;
+}

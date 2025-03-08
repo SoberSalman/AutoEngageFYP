@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Agent</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="static/streaming_audio.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>autoengage</h1>
+        <div class="button-container">
+            <button type="submit" class="redirect-button" onclick="redirectToDashboard()">Organization Dashboard</button>
+            <button type="submit" class="redirect-button" onclick="redirectToChatHistory()">Chat History</button>
+            <button type="submit" class="logout-button" onclick="redirectToLogin()">Logout</button>  
+        </div>
+    </div>
+    <p id="logs">Logs...</p>
+    <canvas id="canvas" width="1000" height="400"></canvas>
+    <button id="startButton">Start</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="static/streaming_audio.js"></script>
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').replace('Z', '');
+            console.log(`Start button pressed at: ${timestamp}`);
+        });
+        function redirectToDashboard() {
+            window.location.href = '/user-dashboard';
+        }
+
+        function redirectToChatHistory() {
+            window.location.href = '/get-chat-history';
+        }
+
+        function redirectToLogin() {
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+</html>
