@@ -227,89 +227,102 @@ def run_chat_agent(
     """
     Enhanced chat function that uses LangChain agent to collect user information.
     """
-    import os
-    import csv
+    print("Running INFO AGENT")
     
     # Initialize user information tracker
     user_info = UserInformation()
     
-    # Extract agent and organization info
-    agent_name = minibot_args.get("agent_name", "Agent")
-    organization_name = minibot_args.get("organization_name", "Our Company")
-    
-    # Get product information
-    products = []
-    if minibot_args:
-        product_names = minibot_args.get("product_names", [])
-        product_descriptions = minibot_args.get("product_descriptions", [])
-        product_features = minibot_args.get("product_features", [])
+    try:
+        # Import here to avoid circular imports
+        from openvoicechat.langchain_agent.agent import InfoCollectionAgent
         
-        for i in range(len(product_names)):
-            product = {
-                "name": product_names[i] if i < len(product_names) else "",
-                "description": product_descriptions[i] if i < len(product_descriptions) else "",
-                "feature": product_features[i] if i < len(product_features) else ""
-            }
-            products.append(product)
-    
-    # Create LangChain agent
-    agent = InfoCollectionAgent(
-        user_info_instance=user_info,
-        agent_name=agent_name,
-        organization_name=organization_name,
-        products=products
-    )
-    
-    # Initial message
-    if starting_message:
-        product_desc = ""
-        if minibot_args and "product_names" in minibot_args and minibot_args["product_names"]:
-            product_desc = f", offering {minibot_args['product_names'][0]}"
+        # Extract agent and organization info
+        agent_name = minibot_args.get("agent_name", "Agent")
+        organization_name = minibot_args.get("organization_name", "Our Company")
+        
+        # Get product information
+        products = []
+        if minibot_args:
+            product_names = minibot_args.get("product_names", [])
+            product_descriptions = minibot_args.get("product_descriptions", [])
+            product_features = minibot_args.get("product_features", [])
             
-        initial_message = f"Hello! I'm {agent_name} from {organization_name}{product_desc}. I'd like to assist you today by gathering some basic information. May I start by asking your name?"
-        mouth.say_text(initial_message)
-    
-    # Main conversation loop
-    pre_interruption_text = ""
-    while True:
-        user_input = pre_interruption_text + " " + ear.listen()
+            for i in range(len(product_names)):
+                product = {
+                    "name": product_names[i] if i < len(product_names) else "",
+                    "description": product_descriptions[i] if i < len(product_descriptions) else "",
+                    "feature": product_features[i] if i < len(product_features) else ""
+                }
+                products.append(product)
         
-        if verbose:
-            print("USER: ", user_input)
-        if os.environ.get("LOGGING", 0):
-            log_to_file(logging_path, "USER: " + user_input)
+        # Create LangChain agent
+        agent = InfoCollectionAgent(
+            user_info_instance=user_info,
+            agent_name=agent_name,
+            organization_name=organization_name,
+            products=products
+        )
         
-        # Process the message using the LangChain agent
-        response = agent.process_message(user_input)
+        # Initial message
+        if starting_message:
+            product_desc = ""
+            if minibot_args and "product_names" in minibot_args and minibot_args["product_names"]:
+                product_desc = f", offering {minibot_args['product_names'][0]}"
+                
+            initial_message = f"Hello! I'm {agent_name} from {organization_name}{product_desc}. I'd like to assist you today by gathering some basic information. May I start by asking your name?"
+            mouth.say_text(initial_message)
         
-        # Speak the response
-        mouth.say_text(response)
-        
-        if verbose:
-            print("BOT: ", response)
-        if os.environ.get("LOGGING", 0):
-            log_to_file(logging_path, "BOT: " + response)
-        
-        # Check if all information has been collected
-        if user_info.is_complete() and user_info.collection_complete:
-            # Save information to CSV
-            is_new_file = not os.path.exists(save_path)
-            with open(save_path, 'a', newline='') as file:
-                writer = csv.writer(file)
-                if is_new_file:
-                    writer.writerow(['Name', 'Age', 'City', 'Zipcode', 'Interest'])
-                writer.writerow([
-                    user_info.name, 
-                    user_info.age, 
-                    user_info.city, 
-                    user_info.zipcode, 
-                    user_info.interest_level
-                ])
+        # Main conversation loop
+        pre_interruption_text = ""
+        while True:
+            user_input = pre_interruption_text + " " + ear.listen()
             
             if verbose:
-                print("INFO COLLECTED: ", user_info)
+                print("USER: ", user_input)
             if os.environ.get("LOGGING", 0):
-                log_to_file(logging_path, "INFO COLLECTED: " + str(user_info))
+                log_to_file(logging_path, "USER: " + user_input)
             
-            # End the conversation
-            break
+            # Process the message using the LangChain agent
+            response = agent.process_message(user_input)
+            
+            # Update chatbot context to maintain state
+            chatbot.messages.append({"role": "user", "content": user_input})
+            chatbot.messages.append({"role": "assistant", "content": response})
+            
+            # Speak the response
+            mouth.say_text(response)
+            
+            if verbose:
+                print("BOT: ", response)
+            if os.environ.get("LOGGING", 0):
+                log_to_file(logging_path, "BOT: " + response)
+            
+            # Check if all information has been collected
+            if user_info.is_complete() and not user_info.collection_complete:
+                user_info.collection_complete = True
+                
+                # Save information to CSV
+                is_new_file = not os.path.exists(save_path)
+                with open(save_path, 'a', newline='') as file:
+                    writer = csv.writer(file)
+                    if is_new_file:
+                        writer.writerow(['Name', 'Age', 'City', 'Zipcode', 'Interest'])
+                    writer.writerow([
+                        user_info.name, 
+                        user_info.age, 
+                        user_info.city, 
+                        user_info.zipcode, 
+                        user_info.interest_level
+                    ])
+                
+                if verbose:
+                    print("INFO COLLECTED: ", user_info)
+                if os.environ.get("LOGGING", 0):
+                    log_to_file(logging_path, "INFO COLLECTED: " + str(user_info))
+                
+                # End the conversation after saving data
+                break
+                
+    except Exception as e:
+        print(f"Error in LangChain agent: {e}")
+        print("Falling back to standard agent...")
