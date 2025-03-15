@@ -21,8 +21,9 @@ class Ear_faster_whisper(BaseEar):
         word_timestamps=False,
         listener=None,
         stream=True,  # Default to stream mode for better timing measurements
+        player=None,  # Added player parameter to match BaseEar
     ):
-        super().__init__(silence_seconds=silence_seconds, listener=listener, stream=stream)
+        super().__init__(silence_seconds=silence_seconds, listener=listener, stream=stream, player=player)
         
         from faster_whisper import WhisperModel
         

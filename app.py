@@ -474,7 +474,7 @@ def condense_json(file_path):
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI()
     if not api_key:
-        raise ValueError("OpenAI API key not found. Please check your environment variables.")
+        raise ValueError("EC2 API key not found. Please check your environment variables.")
     
     openai.api_key = api_key  # Set the API key for the OpenAI module
 
@@ -953,6 +953,7 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
     silence_seconds=2.0,
     listener=listener,
     stream=True,  # Enable streaming mode for better timing
+    player=player
 )
     end = time.time()
     log_response_time(f"STT Model Loading Time", round(end - start, 3))
