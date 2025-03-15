@@ -3,84 +3,159 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign Up</title>
-        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <title>Sign Up | Autoengage</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../static/styles.css">
+        <link rel="stylesheet" href="../static/animations.css">
         <style>
-            .required-asterisk {
-                color: var(--red-brand);
-                font-weight: bold;
+            .form-container {
+                animation: fadeIn 0.5s ease;
             }
-
+            
             .login-redirect {
-                font-size: 1vw;
-                text-align: left;
+                margin-top: 1.5rem;
+                text-align: center;
             }
-
+            
             .login-redirect p {
-                color: var(--white-brand);
+                color: var(--light);
             }
-
+            
             .login-redirect a {
-                color: var(--yellow-brand);
+                color: var(--primary-light);
+                font-weight: 500;
+                transition: all 0.3s ease;
             }
-
+            
             .login-redirect a:hover {
-                text-decoration: underline;
+                color: var(--accent);
+                text-decoration: none;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .spinner {
+                display: inline-block;
+                width: 1rem;
+                height: 1rem;
+                border: 2px solid rgba(255,255,255,0.3);
+                border-radius: 50%;
+                border-top-color: #fff;
+                animation: spin 1s ease-in-out infinite;
+                margin-right: 0.5rem;
+            }
+            
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+            
+            .form-group {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .form-control {
+                background-color: rgba(54, 116, 181, 0.1);
+                border: 1px solid rgba(161, 227, 249, 0.3);
+                transition: all 0.3s ease;
+            }
+            
+            .form-control:focus {
+                background-color: rgba(54, 116, 181, 0.2);
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
+            }
+            
+            .input-highlight {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--primary-light), var(--accent));
+                transition: width 0.3s ease;
+            }
+            
+            .form-control:focus + .input-highlight {
+                width: 100%;
             }
         </style>
     </head>
     <body>
-        <div class="page-wrapper is--home">
+        <div class="page-wrapper">
             <div class="navbar">
                 <a href="/" class="navbar-brand">
                     <h1>autoengage</h1>
                 </a>
                 <div class="button-container">
-                    <button type="submit" class="action2-button" onclick="redirectToHomePage()">Go Back</button>
+                    <button type="button" class="action1-button" onclick="redirectToHomePage()">Go Back</button>
                 </div>
             </div>
-            <div class="section-container">
-                <div class="section-header">SIGN UP</div>
+            
+            <div class="section-container form-container">
+                <div class="section-header">CREATE ACCOUNT</div>
                 <div class="section-content">
                     <form id="signupForm" method="post" action="/signup">
-                        <div class="form-group">
-                            <label for="name">Name <span class="required-asterisk">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Full Name <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <div class="input-highlight"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email Address <span class="required-asterisk">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
+                                    <div class="input-highlight"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email Address <span class="required-asterisk">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
-                        </div>
+                        
                         <div class="form-group">
                             <label for="phone_number">Phone Number</label>
                             <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="+1 123-456-7890">
+                            <div class="input-highlight"></div>
                         </div>
-                        <hr class="custom-hr">
+                        
+                        <div class="custom-hr"></div>
+                        
                         <div class="form-group">
                             <label for="username">Username <span class="required-asterisk">*</span></label>
                             <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="input-highlight"></div>
                         </div>
+                        
                         <div class="form-group">
                             <label for="password">Password <span class="required-asterisk">*</span></label>
                             <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="input-highlight"></div>
+                            <!-- Password strength meter and text are injected here via JS -->
                         </div>
+                        
                         <div class="form-group">
                             <label for="confirm_password">Confirm Password <span class="required-asterisk">*</span></label>
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <div class="input-highlight"></div>
+                            <!-- Password match message is injected here via JS -->
                         </div>
-                        <button type="submit" class="action3-button">Sign Up</button>
+                        
+                        <button type="submit" class="action-accent btn-block">Create Account</button>
                     </form>
-                    <br>
+                    
                     <div class="login-redirect">
-                        <p>Already have an account? <a href="/login">Login</a></p>
+                        <p>Already have an account? <a href="/login">Log In</a></p>
                     </div>
                 </div>
             </div>
         </div>
-        <br>
+        
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../static/password-validator.js"></script>
         <script>
             function redirectToHomePage() {
                 window.location.href = '/';
@@ -88,41 +163,72 @@
 
             document.getElementById('signupForm').addEventListener('submit', function(event) {
                 event.preventDefault();
+                
+                // Add loading state to button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+                submitBtn.disabled = true;
 
                 const formData = new FormData(this);
                 fetch("/signup", {
-                        method: "POST",
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: data.response,
-                                confirmButtonText: 'Okay',
-                            }).then(() => {
-                                window.location.href = "/login";
-                            });
-                        } else if (data.error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: data.error,
-                                confirmButtonText: 'Try Again',
-                            });
-                        }
-                    })
-                    .catch(error => {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    if (data.response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: data.response,
+                            confirmButtonText: 'Proceed to Login',
+                            confirmButtonColor: '#578FCA'
+                        }).then(() => {
+                            window.location.href = "/login";
+                        });
+                    } else if (data.error) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Unexpected Error',
-                            text: 'Something went wrong. Please try again later.',
-                            confirmButtonText: 'Okay',
+                            title: 'Error',
+                            text: data.error,
+                            confirmButtonText: 'Try Again',
+                            confirmButtonColor: '#578FCA'
                         });
-                        console.error('Error:', error);
+                    }
+                })
+                .catch(error => {
+                    // Reset button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Unexpected Error',
+                        text: 'Something went wrong. Please try again later.',
+                        confirmButtonText: 'Okay',
+                        confirmButtonColor: '#578FCA'
                     });
+                    console.error('Error:', error);
+                });
+            });
+            
+            // Add animations to form inputs
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach((input, index) => {
+                // Staggered animation
+                input.style.opacity = 0;
+                input.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    input.style.transition = 'all 0.5s ease';
+                    input.style.opacity = 1;
+                    input.style.transform = 'translateY(0)';
+                }, 100 + (index * 50));
             });
         </script>
     </body>
