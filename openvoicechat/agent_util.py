@@ -320,7 +320,7 @@ def run_chat_agent(
             # Process the message using the LangChain agent
             # Time LLM
             llm_start = time.time()
-            response = agent.process_message(user_input)
+            response = agent.process_message(user_input) 
             llm_end = time.time()
             if timing_callback:
                 timing_callback("llm", llm_start, llm_end)

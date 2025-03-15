@@ -39,7 +39,7 @@ functions = [
 ]
 
 
-class Chatbot_gpt(BaseChatbot):
+class Chatbot_LLM(BaseChatbot):
     def __init__(
         self,
         sys_prompt="",
@@ -58,7 +58,7 @@ class Chatbot_gpt(BaseChatbot):
             self.functions = {}
         if api_key == "":
             load_dotenv()
-            api_key = os.getenv("OPENAI_API_KEY")
+            api_key = os.getenv("LLM_EC2_KEY")
             
 
         self.MODEL = Model
@@ -199,7 +199,7 @@ if __name__ == "_main_":
         ],
     }
 
-    chatbot = Chatbot_gpt()
+    chatbot = Chatbot_LLM()
     while True:
         user_input = input("User: ")
         if user_input.lower() in ["exit", "quit", "stop"]:

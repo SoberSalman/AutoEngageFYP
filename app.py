@@ -24,14 +24,14 @@ from utils.prompts import get_products, get_prompt
 from openvoicechat.tts.tts_elevenlabs import Mouth_elevenlabs
 from openvoicechat.tts.tts_xtts import Mouth_xtts
 from openvoicechat.tts.tts_piper import Mouth_piper
-from openvoicechat.llm.llm_EC2 import Chatbot_gpt as Chatbot
+from openvoicechat.llm.llm_EC2 import Chatbot_LLM as Chatbot
 
 #from openvoicechat.stt.stt_hf import Ear_hf as Ear
 #from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
 
 from openvoicechat.stt.stt_faster_whisper import Ear_faster_whisper as Ear
 
-from openvoicechat.utils import run_chat, Listener_ws, Player_ws
+from openvoicechat.utils import run_chat, Listener_ws, Player_ws,run_chat_langchain
 
 
 from pydantic import BaseModel
@@ -471,7 +471,7 @@ def clean_json_content(raw_content):
 def condense_json(file_path):
     # Load environment variables, including the API key
     print("Beginning condense_json function.")
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("LLM_EC2_KEY")
     client = OpenAI()
     if not api_key:
         raise ValueError("EC2 API key not found. Please check your environment variables.")
@@ -1037,7 +1037,7 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
     else:
         # Use regular chat for non-information agents
         threading.Thread(
-            target=run_chat, 
+            target=run_chat_langchain, 
             args=(mouth, ear, chatbot, minibot_args, True)
         ).start()
 
