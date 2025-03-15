@@ -13,7 +13,7 @@ class Mouth_piper(BaseMouth):
         self.model = piper.PiperVoice.load(model_path=model_path,
                                            config_path=config_path,
                                            use_cuda=True if device == 'cuda' else False)
-        super().__init__(sample_rate=self.model.config.sample_rate, player=player)
+        super().__init__(sample_rate=self.model.config['sample_rate'], player=player)
 
     def run_tts(self, text):
         audio = b''
