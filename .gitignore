@@ -4,3 +4,5 @@ en_US-ryan-high.onnx
 en_US-ryan-high.onnx.json
 en_US-ryan-medium.onnx
 en_US-ryan-medium.onnx.json
+__pycache__/
+*.py[cod]
