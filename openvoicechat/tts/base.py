@@ -9,7 +9,8 @@ import pandas as pd
 import os
 import pysbd
 from dotenv import load_dotenv
-
+import time
+from utils.logger import log_response_time, print_info, print_error, print_warning
 load_dotenv()
 
 TIMING = int(os.environ.get("TIMING", 0))
@@ -56,9 +57,13 @@ class BaseMouth:
         calls run_tts and plays the audio using the player.
         :param text: The text to synthesize speech for
         """
+        start = time.time()
         output = self.run_tts(text)
+        end = time.time()
+        duration = end - start
+        log_response_time("TTS Synthezied in Time", duration)
         self.player.play(output, samplerate=self.sample_rate)
-        self.player.wait()
+        #self.player.wait()
 
     def say(self, audio_queue: queue.Queue, listen_interruption_func: Callable):
         """

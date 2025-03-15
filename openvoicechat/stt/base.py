@@ -23,6 +23,7 @@ class BaseEar:
         listener=None,
         stream=False,
         timing_path=TIMING_PATH,
+        player=None,
     ):
         if not_interrupt_words is None:
             not_interrupt_words = [
@@ -37,6 +38,7 @@ class BaseEar:
         self.listener = listener
         self.stream = stream
         self.timing_path = timing_path
+        self.player = player
         if TIMING:
             if not os.path.exists(self.timing_path):
                 columns = ["Model", "Time Taken"]
@@ -125,7 +127,7 @@ class BaseEar:
 
         audio_thread = Thread(
             target=record_user_stream,
-            args=(self.silence_seconds, self.vad, audio_queue, self.listener),
+            args=(self.silence_seconds, self.vad, audio_queue, self.listener,self.player),
         )
         transcription_thread = Thread(
             target=self.transcribe_stream, args=(audio_queue, transcription_queue)
@@ -201,3 +203,4 @@ class BaseEar:
                     record_seconds -= duration
                 else:
                     return text
+    

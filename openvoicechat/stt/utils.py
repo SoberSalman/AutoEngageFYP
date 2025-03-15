@@ -101,7 +101,7 @@ def record_user(silence_seconds, vad, streamer=None, started=False):
     return frames.astype(np.float32)
 
 
-def record_user_stream(silence_seconds, vad, audio_queue, streamer=None):
+def record_user_stream(silence_seconds, vad, audio_queue, streamer=None,player=None):
     frames = []
 
     started = False
@@ -127,6 +127,7 @@ def record_user_stream(silence_seconds, vad, audio_queue, streamer=None):
         if not started and contains_speech:
             started = True
             print("*Listening to Speech...")
+            player.stop()
         if started and contains_speech is False:
             break
     audio_queue.put(None)
