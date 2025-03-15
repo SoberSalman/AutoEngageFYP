@@ -6,6 +6,31 @@ import csv
 import threading
 from openvoicechat.utils import log_to_file
 from openvoicechat.langchain_agent.agent import InfoCollectionAgent
+import time
+
+
+
+def clean_text_for_tts(text):
+    """
+    Clean text from markdown and special characters before sending to TTS
+    """
+    # Remove markdown formatting
+    cleaned = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # Bold text
+    cleaned = re.sub(r'\*(.*?)\*', r'\1', cleaned)    # Italic text
+    
+    # Remove bullet points and numbering
+    cleaned = re.sub(r'^\s*[\*\-•]\s+', '', cleaned, flags=re.MULTILINE)  # Bullet points
+    cleaned = re.sub(r'^\s*\d+\.\s+', '', cleaned, flags=re.MULTILINE)    # Numbered lists
+    
+    # Replace special characters commonly found in markdown
+    cleaned = cleaned.replace('**', '')
+    cleaned = cleaned.replace('*', '')
+    cleaned = cleaned.replace('`', '')
+    cleaned = cleaned.replace('#', '')
+    cleaned = cleaned.replace('>', '')
+    
+    return cleaned
+
 
 class UserInformation:
     """Class to track and store user information during a conversation"""
@@ -222,10 +247,12 @@ def run_chat_agent(
     stopping_criteria=lambda x: False,
     starting_message=True,
     logging_path="chat_log.txt",
-    save_path="user_info.csv"
+    save_path="user_info.csv",
+    timing_callback=None
 ):
     """
     Enhanced chat function that uses LangChain agent to collect user information.
+    Now with timing measurements.
     """
     print("Running INFO AGENT")
     
@@ -275,7 +302,15 @@ def run_chat_agent(
         # Main conversation loop
         pre_interruption_text = ""
         while True:
+            # Start timing the total cycle
+            total_cycle_start = time.time()
+            
+            # Time STT
+            stt_start = time.time()
             user_input = pre_interruption_text + " " + ear.listen()
+            stt_end = time.time()
+            if timing_callback:
+                timing_callback("stt", stt_start, stt_end)
             
             if verbose:
                 print("USER: ", user_input)
@@ -283,14 +318,30 @@ def run_chat_agent(
                 log_to_file(logging_path, "USER: " + user_input)
             
             # Process the message using the LangChain agent
+            # Time LLM
+            llm_start = time.time()
             response = agent.process_message(user_input)
+            llm_end = time.time()
+            if timing_callback:
+                timing_callback("llm", llm_start, llm_end)
             
             # Update chatbot context to maintain state
             chatbot.messages.append({"role": "user", "content": user_input})
             chatbot.messages.append({"role": "assistant", "content": response})
             
-            # Speak the response
-            mouth.say_text(response)
+            cleaned_response = clean_text_for_tts(response)
+
+            # Time TTS
+            tts_start = time.time()
+            mouth.say_text(cleaned_response)
+            tts_end = time.time()
+            if timing_callback:
+                timing_callback("tts", tts_start, tts_end)
+            
+            # Record the total cycle time
+            total_cycle_end = time.time()
+            if timing_callback:
+                timing_callback("total_cycle", total_cycle_start, total_cycle_end)
             
             if verbose:
                 print("BOT: ", response)

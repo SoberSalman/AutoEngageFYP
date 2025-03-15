@@ -27,7 +27,10 @@ from openvoicechat.tts.tts_piper import Mouth_piper
 from openvoicechat.llm.llm_EC2 import Chatbot_gpt as Chatbot
 
 #from openvoicechat.stt.stt_hf import Ear_hf as Ear
-from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
+#from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
+
+from openvoicechat.stt.stt_faster_whisper import Ear_faster_whisper as Ear
+
 from openvoicechat.utils import run_chat, Listener_ws, Player_ws
 
 
@@ -930,20 +933,55 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
         mouth = Mouth_piper(player=player, device=DEVICE)
         end = time.time()
         log_response_time("TTS Model (ElevenLabs) Loading Time", round(end - start, 3))
-    elif voice_id == "None" or voice_id == None:  # Use xTTS
+    elif voice_id == "None" or voice_id == None:  # Use piper
         start = time.time()
         mouth = Mouth_piper(player=player, device=DEVICE)
         end = time.time()
         log_response_time("TTS Model (Piper) Loading Time", round(end - start, 3))
 
     start = time.time()
+    # ear = Ear(
+    #     api_key=DEEPGRAM_API_KEY,
+    #     silence_seconds=2.0,
+    #     listener=listener,
+    # )
+
     ear = Ear(
-        api_key=DEEPGRAM_API_KEY,
-        silence_seconds=2.0,
-        listener=listener,
-    )
+    model_size="distil-large-v3",  # You can choose different sizes based on your needs
+    device=DEVICE,
+    compute_type="float16" if DEVICE == "cuda" else "int8",
+    silence_seconds=2.0,
+    listener=listener,
+    stream=True,  # Enable streaming mode for better timing
+)
     end = time.time()
     log_response_time(f"STT Model Loading Time", round(end - start, 3))
+
+
+    metrics = {
+    "recording_times": [],
+    "stt_times": [],
+    "llm_times": [],
+    "tts_times": [],
+    "total_cycle_times": []
+    }
+
+    # Create a custom callback to track timing metrics
+    def timing_callback(phase, start_time, end_time):
+        duration = round(end_time - start_time, 3)
+        if phase == "stt":
+            metrics["stt_times"].append(duration)
+            log_response_time("STT Processing Time", duration)
+        elif phase == "llm":
+            metrics["llm_times"].append(duration)
+            log_response_time("LLM Response Time", duration)
+        elif phase == "tts":
+            metrics["tts_times"].append(duration)
+            log_response_time("TTS Processing Time", duration)
+        elif phase == "total_cycle":
+            metrics["total_cycle_times"].append(duration)
+            log_response_time("Total Cycle Time", duration)
+
 
     product_names = []
     product_descriptions = []
@@ -981,19 +1019,20 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
         
         # Start the information collection agent thread
         threading.Thread(
-        target=run_chat_agent,
-        args=(
-            mouth, 
-            ear, 
-            chatbot, 
-            minibot_args, 
-            True,  # verbose
-            lambda x: False,  # stopping_criteria
-            True,  # starting_message
-            "chat_log.txt",  # logging_path
-            save_path  # save_path for collected information
-        )
-    ).start()
+            target=run_chat_agent,
+            args=(
+                mouth, 
+                ear, 
+                chatbot, 
+                minibot_args, 
+                True,  # verbose
+                lambda x: False,  # stopping_criteria
+                True,  # starting_message
+                "chat_log.txt",  # logging_path
+                save_path,  # save_path for collected information
+                timing_callback  # Pass the timing callback
+            )
+        ).start()
     else:
         # Use regular chat for non-information agents
         threading.Thread(
@@ -1013,6 +1052,18 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
             await websocket.send_bytes(response_data)
             try:
                 existing_chat.chat_data = chatbot.get_context()
+
+                if metrics["total_cycle_times"]:
+                    latency_data = {
+                        "avg_stt_time": sum(metrics["stt_times"]) / len(metrics["stt_times"]) if metrics["stt_times"] else 0,
+                        "avg_llm_time": sum(metrics["llm_times"]) / len(metrics["llm_times"]) if metrics["llm_times"] else 0,
+                        "avg_tts_time": sum(metrics["tts_times"]) / len(metrics["tts_times"]) if metrics["tts_times"] else 0,
+                        "avg_total_time": sum(metrics["total_cycle_times"]) / len(metrics["total_cycle_times"]) if metrics["total_cycle_times"] else 0,
+                    }
+
+                    existing_chat.response_time = latency_data["avg_total_time"]
+                    existing_chat.metrics = latency_data  # You'll need to add this field to your model
+                
                 db.commit()
                 db.refresh(existing_chat)
             except:

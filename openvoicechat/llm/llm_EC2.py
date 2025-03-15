@@ -91,7 +91,7 @@ class Chatbot_gpt(BaseChatbot):
         #     yield response
         # else:
         print("Fetching response from LLM.")
-        yield "Filler:" + random.choice(FILLERS) + " "
+        #yield "Filler:" + random.choice(FILLERS) + " "
         finished = False
         while not finished:
             func_call = dict()

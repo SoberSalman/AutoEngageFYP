@@ -106,9 +106,11 @@ class Player_ws:
         self.output_queue = q
         self.playing = False
         self._timer_thread = None
+        self.interrupted = False
 
     def play(self, audio_array, samplerate):
         self.playing = True
+        self.interrupted = False
         duration = len(audio_array) / samplerate
         if audio_array.dtype == np.int16:
             audio_array = audio_array / (1 << 15)
@@ -117,7 +119,10 @@ class Player_ws:
             y=audio_array, orig_sr=samplerate, target_sr=44100
         )
         audio_array = audio_array.tobytes()
-        self.output_queue.put(audio_array)
+        
+        if not self.interrupted:
+            self.output_queue.put(audio_array)
+            
         if self._timer_thread is not None:
             if self._timer_thread.is_alive():
                 self._timer_thread.terminate()
@@ -128,15 +133,18 @@ class Player_ws:
 
     def stop(self):
         self.playing = False
+        self.interrupted = True
         self.output_queue.queue.clear()
         self.output_queue.put("stop".encode())
-        self._timer_thread.terminate()
+        if self._timer_thread and self._timer_thread.is_alive():
+            self._timer_thread.terminate()
 
     def wait(self):
-        self._timer_thread.join()
+        if self._timer_thread:
+            self._timer_thread.join()
         self.playing = False
 
-
+        
 class Listener_ws:
     def __init__(self, q):
         self.input_queue = q

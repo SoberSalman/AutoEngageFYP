@@ -201,3 +201,4 @@ class BaseEar:
                     record_seconds -= duration
                 else:
                     return text
+    
