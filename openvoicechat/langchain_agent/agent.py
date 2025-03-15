@@ -24,7 +24,7 @@ class InfoCollectionAgent:
         self.organization_name = organization_name
         
         # Set up the OpenAI API key
-        api_key = api_key or os.getenv("OPENAI_API_KEY")
+        api_key = api_key or os.getenv("LLM_EC2_KEY")
         if not api_key:
             raise ValueError("OpenAI API key is required")
         

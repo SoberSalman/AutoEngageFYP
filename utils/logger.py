@@ -2,7 +2,7 @@ import os
 import sys
 
 
-LOG_FILE = os.getenv("LOG_FILE", "response_times.log")
+LOG_FILE = os.getenv("LOG_FILE", "response_times_2.log")
 PRINT_INFO = os.getenv("PRINT_INFO", True)
 PRINT_ERROR = os.getenv("PRINT_ERROR", True)
 PRINT_WARNING = os.getenv("PRINT_WARNING", True)
