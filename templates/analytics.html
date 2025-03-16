@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | Autoengage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #1a2330;
+            background-image: linear-gradient(135deg, rgba(25, 32, 45, 0.8) 0%, rgba(25, 32, 45, 0.9) 100%);
+            color: #a1e3f9;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem 3rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d1f8ef;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .stats-card {
+            background-color: #15202b;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            height: 100%;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(41, 50, 65, 0.8);
+        }
+        
+        .card-title {
+            color: #a1e3f9;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid rgba(161, 227, 249, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .metric-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .metric-card {
+            background-color: #1c2936;
+            border-radius: 10px;
+            padding: 1.25rem;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #293241;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d1f8ef;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            font-size: 1rem;
+            color: #a1e3f9;
+            opacity: 0.8;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .team-section {
+            margin-top: 2rem;
+        }
+        
+        .team-header {
+            background-color: #1c2936;
+            padding: 1rem 1.25rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            border-bottom: 1px solid #293241;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .team-header-name {
+            font-size: 1.2rem;
+        }
+        
+        .team-stats {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .team-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .team-stat-value {
+            font-weight: 600;
+            color: #d1f8ef;
+        }
+        
+        .team-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .agent-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+        
+        .agent-table th {
+            background-color: #212f3e;
+            padding: 0.75rem 1.25rem;
+            text-align: left;
+            font-weight: 500;
+            color: #a1e3f9;
+            border-bottom: 1px solid #344259;
+        }
+        
+        .agent-table td {
+            background-color: #1c2936;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #293241;
+        }
+        
+        .agent-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .response-time {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .response-time-value {
+            font-weight: 500;
+        }
+        
+        .response-time-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #15202b;
+            width: 100px;
+            position: relative;
+        }
+        
+        .response-time-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #3674B5, #578FCA);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        /* Fix for flexbox gap in older browsers */
+        @supports not (gap: 1rem) {
+            .metric-container > * {
+                margin: 0.75rem;
+            }
+            .team-stats > * {
+                margin-right: 1rem;
+            }
+            .response-time > * {
+                margin-right: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="navbar-brand">
+            <h1>autoengage</h1>
+        </a>
+        <div class="button-container">
+            <button type="button" class="action1-button" onclick="window.location.href='/user-dashboard'">Dashboard</button>
+            <button type="button" class="action2-button" onclick="window.location.href='/login'">Logout</button>
+        </div>
+    </div>
+    
+    <div class="dashboard-container">
+        <h1 class="page-title fade-in">Analytics Dashboard</h1>
+        
+        <!-- Overview Cards -->
+        <div class="row fade-in delay-1">
+            <div class="col-md-6">
+                <div class="stats-card">
+                    <h2 class="card-title">Overall Metrics</h2>
+                    <div class="metric-container">
+                        <div class="metric-card">
+                            <div class="metric-label">Total Calls</div>
+                            <div class="metric-value" id="totalCalls">0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg. Response Time</div>
+                            <div class="metric-value" id="avgResponseTime">0.0s</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stats-card">
+                    <h2 class="card-title">Active Teams</h2>
+                    <div class="metric-container">
+                        <div class="metric-card">
+                            <div class="metric-label">Total Teams</div>
+                            <div class="metric-value" id="teamCount">0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Total Agents</div>
+                            <div class="metric-value" id="agentCount">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="row fade-in delay-2">
+            <div class="col-md-8">
+                <div class="stats-card">
+                    <h2 class="card-title">Call Volume Trend (Last 7 Days)</h2>
+                    <div class="chart-container">
+                        <canvas id="callTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h2 class="card-title">Team Performance</h2>
+                    <div class="chart-container">
+                        <canvas id="teamPerformanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Stats -->
+        <div class="fade-in delay-3">
+            <h2 class="card-title" style="margin-top: 2rem;">Team Statistics</h2>
+            
+            {% if team_stats and team_stats|length > 0 %}
+                {% for team in team_stats %}
+                <div class="team-section">
+                    <div class="team-header">
+                        <div class="team-header-name">{{ team.team_name }}</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <div class="team-stat-label">Calls:</div>
+                                <div class="team-stat-value">{{ team.team_calls }}</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="team-stat-label">Avg. Response:</div>
+                                <div class="team-stat-value">{{ "%.2f"|format(team.team_avg_response_time|float) }}s</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="agent-table">
+                        <thead>
+                            <tr>
+                                <th>Agent</th>
+                                <th>Total Calls</th>
+                                <th>Response Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if team.agents and team.agents|length > 0 %}
+                                {% for agent in team.agents %}
+                                <tr>
+                                    <td>{{ agent.agent_name }}</td>
+                                    <td>{{ agent.calls_count }}</td>
+                                    <td>
+                                        <div class="response-time">
+                                            <div class="response-time-value">{{ "%.2f"|format(agent.avg_response_time|float) }}s</div>
+                                            <div class="response-time-bar">
+                                                {% set width = (agent.avg_response_time|float * 10)|round|int %}
+                                                {% if width > 100 %}{% set width = 100 %}{% endif %}
+                                                <div class="response-time-fill" style="width: {{ width }}%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">No agents available for this team</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="team-section" style="text-align: center; padding: 2rem;">
+                    <p>No team statistics available</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        // Function to calculate and update overall stats
+        function updateOverallStats() {
+            let totalCalls = 0;
+            let totalResponseTime = 0;
+            let teamCount = {{ team_stats|length if team_stats else 0 }};
+            let agentCount = 0;
+            
+            // Loop through teams to calculate metrics
+            {% if team_stats %}
+                {% for team in team_stats %}
+                    totalCalls += {{ team.team_calls if team.team_calls is defined else 0 }};
+                    totalResponseTime += {{ team.team_avg_response_time|float if team.team_avg_response_time is defined else 0 }} * {{ team.agents|length if team.agents else 0 }};
+                    agentCount += {{ team.agents|length if team.agents else 0 }};
+                {% endfor %}
+            {% endif %}
+            
+            // Calculate average response time across all teams
+            const avgResponseTime = agentCount > 0 ? totalResponseTime / agentCount : 0;
+            
+            // Update the UI with calculated metrics
+            document.getElementById('totalCalls').textContent = totalCalls;
+            document.getElementById('avgResponseTime').textContent = avgResponseTime.toFixed(2) + 's';
+            document.getElementById('teamCount').textContent = teamCount;
+            document.getElementById('agentCount').textContent = agentCount;
+            
+            return {
+                totalCalls,
+                avgResponseTime,
+                teamCount,
+                agentCount
+            };
+        }
+        
+        // Initialize charts once DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculate overall stats
+            const stats = updateOverallStats();
+            
+            // Call Volume Trend Chart
+            const trendCtx = document.getElementById('callTrendChart').getContext('2d');
+            const trendData = {
+                labels: [
+                    {% if daily_calls %}
+                        {% for day in daily_calls %}
+                            "{{ day.date }}",
+                        {% endfor %}
+                    {% else %}
+                        "No Data"
+                    {% endif %}
+                ],
+                datasets: [{
+                    label: 'Number of Calls',
+                    data: [
+                        {% if daily_calls %}
+                            {% for day in daily_calls %}
+                                {{ day.calls }},
+                            {% endfor %}
+                        {% else %}
+                            0
+                        {% endif %}
+                    ],
+                    fill: true,
+                    backgroundColor: 'rgba(54, 116, 181, 0.2)',
+                    borderColor: '#3674B5',
+                    tension: 0.4,
+                    pointBackgroundColor: '#A1E3F9',
+                    pointBorderColor: '#3674B5',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            };
+            
+            const trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: trendData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animations: {
+                        tension: {
+                            duration: 1000,
+                            easing: 'linear',
+                            from: 0.4,
+                            to: 0.2,
+                            loop: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(161, 227, 249, 0.1)'
+                            },
+                            ticks: {
+                                color: '#A1E3F9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(161, 227, 249, 0.1)'
+                            },
+                            ticks: {
+                                color: '#A1E3F9'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#A1E3F9'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Team Performance Chart (Doughnut)
+            const teamCtx = document.getElementById('teamPerformanceChart').getContext('2d');
+            const teamData = {
+                labels: [
+                    {% if team_stats %}
+                        {% for team in team_stats %}
+                            "{{ team.team_name }}",
+                        {% endfor %}
+                    {% else %}
+                        "No Teams"
+                    {% endif %}
+                ],
+                datasets: [{
+                    data: [
+                        {% if team_stats %}
+                            {% for team in team_stats %}
+                                {{ team.team_calls if team.team_calls is defined else 0 }},
+                            {% endfor %}
+                        {% else %}
+                            1
+                        {% endif %}
+                    ],
+                    backgroundColor: [
+                        '#3674B5',
+                        '#578FCA',
+                        '#A1E3F9',
+                        '#D1F8EF',
+                        '#4E9CA9',
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            
+            const teamChart = new Chart(teamCtx, {
+                type: 'doughnut',
+                data: teamData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#A1E3F9',
+                                padding: 10
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+            
+            // Animate response time bars
+            const bars = document.querySelectorAll('.response-time-fill');
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    bar.style.transition = 'width 1s ease-out';
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
