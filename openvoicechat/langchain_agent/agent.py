@@ -1,3 +1,4 @@
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_openai_functions_agent
 from langchain.memory import ConversationBufferMemory
@@ -7,6 +8,25 @@ from typing import List, Dict, Any, Optional
 import os
 
 from .tools import ValidateZipcodeTool, GetProductInfoTool, create_user_info_tools
+
+class StreamingCollectorCallbackHandler(BaseCallbackHandler):
+    """Custom callback handler to stream tokens and collect the full response."""
+    def __init__(self):
+        super().__init__()
+        self.tokens = []  # To collect tokens
+        self.complete_response = ""  # To store the final response
+
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        """Called whenever a new token is generated."""
+        # Print the token as it is generated (streaming)
+        print(token, end="", flush=True)
+        # Collect the token
+        self.tokens.append(token)
+
+    def on_llm_end(self, response, **kwargs) -> None:
+        """Called when the LLM finishes generating the response."""
+        # Combine all tokens into the complete response
+        self.complete_response = "".join(self.tokens)
 
 class InfoCollectionAgent:
     """Agent for collecting user information in a conversational manner."""
@@ -46,8 +66,8 @@ class InfoCollectionAgent:
         self.llm = ChatOpenAI(
             temperature=0.7, 
             api_key=api_key, 
-            model="gpt-4o-mini", 
-            streaming=True
+            model="gpt-4",  # Updated to a valid model
+            streaming=True  # Enable streaming
         )
         
         # Create conversation memory
@@ -116,13 +136,22 @@ Current user information: {user_info}
         )
     
     def process_message(self, message: str) -> str:
-        """Process a user message and return the agent's response."""
+        """Process a user message, stream the response, and return the full response."""
         # Recreate the agent with updated system message
         self._create_agent_executor()
         
         try:
-            # Run the agent executor
-            return self.agent_executor.invoke({"input": message})["output"]
+            # Create a custom streaming callback handler
+            streaming_callback = StreamingCollectorCallbackHandler()
+            
+            # Run the agent executor with streaming
+            self.agent_executor.invoke(
+                {"input": message},
+                {"callbacks": [streaming_callback]}
+            )
+            
+            # Return the complete response after streaming
+            return streaming_callback.complete_response
         except Exception as e:
             print(f"Error in agent: {e}")
             # Fallback response if there's an error
