@@ -3,119 +3,330 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Dashboard</title>
-        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <title>User Dashboard | Autoengage</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../static/styles.css">
-        <link rel="stylesheet" href="../static/animations.css">
         <style>
-            a {
-                color: var(--yellow-brand);
+            body {
+                background-color: #1a2330;
+                background-image: linear-gradient(135deg, rgba(25, 32, 45, 0.8) 0%, rgba(25, 32, 45, 0.9) 100%);
+                color: #a1e3f9;
+            }
+            
+            .dashboard-container {
+                padding-bottom: 3rem;
+            }
+            
+            .page-title {
+                font-size: 3.5rem;
+                font-weight: 600;
+                color: #a1e3f9;
+                text-align: center;
+                margin: 2rem 0 3rem;
+            }
+            
+            .card-row {
+                display: flex;
+                justify-content: center;
+                max-width: 1300px;
+                margin: 0 auto;
+                gap: 1.5rem;
+            }
+            
+            .dashboard-card {
+                background-color: #15202b;
+                border-radius: 16px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                padding: 1.75rem;
+                height: 100%;
+                min-height: 350px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid rgba(41, 50, 65, 0.8);
+            }
+            
+            .card-title {
+                color: #a1e3f9;
+                font-size: 1.75rem;
+                font-weight: 500;
+                margin-bottom: 1.5rem;
+                border-bottom: 2px solid #a1e3f9;
+                padding-bottom: 0.5rem;
+            }
+            
+            .card-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .org-name {
+                font-size: 3rem;
+                color: #d1f8ef;
+                text-align: center;
+                margin: auto 0;
+                font-weight: 600;
+            }
+            
+            .team-item, .agent-item {
+                background-color: #1c2936;
+                border-radius: 8px;
+                padding: 0.85rem 1.25rem;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: 1px solid #293241;
+                transition: all 0.2s ease;
+            }
+            
+            .team-item:hover, .agent-item:hover {
+                background-color: #212f3e;
+                transform: translateX(5px);
+                border-color: #344259;
+            }
+            
+            .item-name {
+                font-weight: 500;
+                color: #fff;
+                font-size: 1.1rem;
+            }
+            
+            .item-actions {
+                display: flex;
+                gap: 0.75rem;
+            }
+            
+            .action-btn {
+                padding: 0.4rem 1rem;
+                border-radius: 6px;
+                font-size: 0.9rem;
                 text-decoration: none;
-                transition: color 0.3s, text-decoration 0.3s;
+                font-weight: 500;
+                transition: all 0.2s ease;
             }
-
-            a:hover {
-                color: var(--yellow-brand);
-                text-decoration: underline;
+            
+            .action-btn.delete {
+                background-color: rgba(231, 76, 60, 0.2);
+                color: #e74c3c;
+                border: 1px solid #e74c3c;
             }
-
-            input[type="text"], select {
-                border: 0.07vw solid var(--white-brand);
-                border-radius: 0.35vw;
-                box-sizing: border-box;
-                color: var(--black-brand);
-                margin: 0.7vw 0;
-                padding: 0.7vw;
+            
+            .action-btn.delete:hover {
+                background-color: #e74c3c;
+                color: white;
+                text-decoration: none;
+            }
+            
+            .action-btn.use {
+                background-color: rgba(46, 204, 113, 0.2);
+                color: #2ecc71;
+                border: 1px solid #2ecc71;
+            }
+            
+            .action-btn.use:hover {
+                background-color: #2ecc71;
+                color: white;
+                text-decoration: none;
+            }
+            
+            .team-group {
+                margin-bottom: 1.75rem;
+            }
+            
+            .team-header {
+                color: #a1e3f9;
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+            }
+            
+            .create-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                color: #a1e3f9;
+                border: 1px solid #a1e3f9;
+                border-radius: 8px;
+                padding: 0.6rem 1.2rem;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                margin-top: auto;
+                width: max-content;
+            }
+            
+            .create-button:hover {
+                background-color: rgba(161, 227, 249, 0.15);
+            }
+            
+            .create-agent-form {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-top: auto;
+            }
+            
+            .team-select {
+                flex: 1;
+                background-color: #1c2936;
+                border: 1px solid #344259;
+                border-radius: 6px;
+                color: #fff;
+                padding: 0.6rem 1rem;
+                appearance: none;
+            }
+            
+/* Fixed dropdown styling to match image */
+            .select-wrapper {
+                position: relative;
                 width: 100%;
             }
-
-            .p {
-                color: var(--yellow-brand);
+            
+            .select-dropdown {
+                width: 100%;
+                padding: 0.85rem 1rem;
+                color: #a1e3f9;
+                background-color: #15202b;
+                border: 1px solid #2a364c;
+                border-radius: 8px;
+                appearance: none;
+                -webkit-appearance: none;
+                cursor: pointer;
             }
-
-            .organization-name {
-                color: var(--yellow-brand);
-                font-size: 2vw;
-                font-weight: bold;
-                text-align: center;
+            
+            .select-dropdown:focus {
+                outline: none;
+                border-color: #a1e3f9;
             }
+            
+            /* Custom triangle dropdown indicator */
+            .select-wrapper:after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 15px;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-top: 6px solid #a1e3f9;
+                pointer-events: none;
+            }
+            
         </style>
     </head>
     <body>
-        <div class="page-wrapper is--home">
+        <div class="dashboard-container">
             <div class="navbar">
                 <a href="/" class="navbar-brand">
                     <h1>autoengage</h1>
                 </a>
                 <div class="button-container">
-                    <button type="submit" class="action2-button" onclick="redirectToLogin()">Logout</button>
+                    <button type="button" class="action2-button btn-ripple" onclick="redirectToLogin()">Logout</button>
                 </div>
             </div>
-            <div class="section-container">
-                <div class="section-header">ORGANIZATION</div>
-                <div class="section-content">
-                    {% if organization %}
-                    <ul class="organization-name">{{ organization.name }}</ul>
-                    {% else %}
-                    <button class="action3-button" onclick="window.location.href='/create-organization'">Create Organization</button>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="section-container">
-                <div class="section-header">TEAMS</div>
-                <div class="section-content">
-                    <ul>
-                        {% if teams %}
-                        {% for team in teams %}
-                        <li>
-                            {{ team.name }} | <a href="#" onclick="deleteTeam('{{ team.name }}')">Delete Team</a>
-                        </li>
-                        {% endfor %}
+            
+            <h1 class="page-title">Dashboard</h1>
+            
+            <div class="card-row">
+                <!-- Organization Card -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">Organization</h2>
+                    <div class="card-content">
+                        {% if organization %}
+                        <div class="org-name">{{ organization.name }}</div>
+                        {% else %}
+                        <div style="text-align: center; margin: auto 0;">
+                            <p>No organization found</p>
+                            <button class="create-button" onclick="window.location.href='/create-organization'">
+                                + Create Organization
+                            </button>
+                        </div>
                         {% endif %}
-                    </ul>
-                    {% if organization %}
-                    <button class="action3-button" onclick="window.location.href='/team-details'">Create Team</button>
-                    {% else %}
-                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Teams Available</p>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
-            <div class="section-container">
-                <div class="section-header">AGENTS</div>
-                <div class="section-content">
-                    <ul>
-                        {% if agents %}
-                        {% for team_name, agents_list in agents.items() %}
-                        <li>{{ team_name }}</li>
-                        <ul>
-                            {% if agents_list|length > 0 %}
-                            {% for agent in agents_list %}
-                            <li>{{ agent.name }} | <a href="/use-agent/{{ team_name }}/{{ agent.name }}">Use</a> | <a href="#" onclick="deleteAgent('{{ agent.name }}')">Delete</a></li>
-                            {% endfor %}
-                            {% else %}
-                            <li style="color: #c8464b;">No Agents Available for this Team</li>
-                            {% endif %}
-                        </ul>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
-                    {% if teams %}
-                    <form method="post" action="/agent-details">
-                        <select name="team_name">
+                
+                <!-- Teams Card -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">Teams</h2>
+                    <div class="card-content">
+                        {% if teams and teams|length > 0 %}
+                        <div style="flex: 1;">
                             {% for team in teams %}
-                            <option value="{{ team.name }}">{{ team.name }}</option>
+                            <div class="team-item">
+                                <span class="item-name">{{ team.name }}</span>
+                                <div class="item-actions">
+                                    <a href="#" class="action-btn delete" onclick="deleteTeam('{{ team.name }}')">Delete</a>
+                                </div>
+                            </div>
                             {% endfor %}
-                        </select>
-                        <button type="submit" class="action3-button">Create Agent</button>
-                    </form>
-                    {% else %}
-                    <p style="color: #c8464b; max-width: 100%; text-align: center;">No Agents Available</p>
-                    {% endif %}
+                        </div>
+                        {% else %}
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <p>No teams available</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if organization %}
+                        <button class="create-button" onclick="window.location.href='/team-details'">
+                            + Create Team
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Agents Card -->
+                <div class="dashboard-card">
+                    <h2 class="card-title">Agents</h2>
+                    <div class="card-content">
+                        {% if agents and agents|length > 0 %}
+                        <div style="flex: 1;">
+                            {% for team_name, agents_list in agents.items() %}
+                            <div class="team-group">
+                                <div class="team-header">{{ team_name }}</div>
+                                {% if agents_list|length > 0 %}
+                                {% for agent in agents_list %}
+                                <div class="agent-item">
+                                    <span class="item-name">{{ agent.name }}</span>
+                                    <div class="item-actions">
+                                        <a href="/use-agent/{{ team_name }}/{{ agent.name }}" class="action-btn use">Use</a>
+                                        <a href="#" class="action-btn delete" onclick="deleteAgent('{{ agent.name }}')">Delete</a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <p>No agents for this team</p>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <p>No agents available</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if teams and teams|length > 0 %}
+                        <form method="post" action="/agent-details" class="create-agent-form">
+                            <div class="select-wrapper">
+                                <select name="team_name" class="select-dropdown">
+                                    {% for team in teams %}
+                                    <option value="{{ team.name }}">{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="create-button">+ Create Agent</button>
+                        </form>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
+        
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             function redirectToLogin() {
@@ -125,46 +336,59 @@
             function deleteTeam(teamName) {
                 Swal.fire({
                     icon: 'warning',
-                    title: "Warning",
+                    title: "Delete Team",
                     text: `Are you sure you want to delete team "${teamName}"?`,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    reverseButtons: true
+                    confirmButtonText: 'Delete',
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonText: 'Cancel',
+                    cancelButtonColor: '#3674B5',
+                    reverseButtons: true,
+                    background: '#1c1c1c',
+                    color: '#fff'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         fetch(`/delete-team/${teamName}`, {
-                                method: 'DELETE',
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.response) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: data.response,
-                                        confirmButtonText: 'Okay'
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else if (data.error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.error,
-                                        confirmButtonText: 'Try Again',
-                                    })
-                                }
-                            })
-                            .catch(error => {
+                            method: 'DELETE',
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: data.response,
+                                    confirmButtonText: 'Okay',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else if (data.error) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Unexpected Error',
-                                    text: 'Something went wrong. Please try again later.',
-                                    confirmButtonText: 'Okay',
+                                    title: 'Error',
+                                    text: data.error,
+                                    confirmButtonText: 'Try Again',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
                                 });
-                                console.error('Error:', error);
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Unexpected Error',
+                                text: 'Something went wrong. Please try again later.',
+                                confirmButtonText: 'Okay',
+                                confirmButtonColor: '#3674B5',
+                                background: '#1c1c1c',
+                                color: '#fff'
                             });
+                            console.error('Error:', error);
+                        });
                     }
                 });
             }
@@ -172,49 +396,62 @@
             function deleteAgent(agentName) {
                 Swal.fire({
                     icon: 'warning',
-                    title: "Warning",
+                    title: "Delete Agent",
                     text: `Are you sure you want to delete agent "${agentName}"?`,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    reverseButtons: true
+                    confirmButtonText: 'Delete',
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonText: 'Cancel',
+                    cancelButtonColor: '#3674B5',
+                    reverseButtons: true,
+                    background: '#1c1c1c',
+                    color: '#fff'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         fetch(`/delete-agent/${agentName}`, {
-                                method: 'DELETE',
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.response) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: data.response,
-                                        confirmButtonText: 'Okay'
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                } else if (data.error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.error,
-                                        confirmButtonText: 'Try Again',
-                                    });
-                                }
-                            })
-                            .catch(error => {
+                            method: 'DELETE',
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: data.response,
+                                    confirmButtonText: 'Okay',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else if (data.error) {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Unexpected Error',
-                                    text: 'Something went wrong. Please try again later.',
-                                    confirmButtonText: 'Okay',
+                                    title: 'Error',
+                                    text: data.error,
+                                    confirmButtonText: 'Try Again',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
                                 });
-                                console.error('Error:', error);
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Unexpected Error',
+                                text: 'Something went wrong. Please try again later.',
+                                confirmButtonText: 'Okay',
+                                confirmButtonColor: '#3674B5',
+                                background: '#1c1c1c',
+                                color: '#fff'
                             });
+                            console.error('Error:', error);
+                        });
                     }
                 });
-            }            
+            }
         </script>
     </body>
 </html>
