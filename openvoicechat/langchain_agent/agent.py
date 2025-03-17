@@ -46,7 +46,7 @@ class InfoCollectionAgent:
         # Set up the OpenAI API key
         api_key = api_key or os.getenv("LLM_EC2_KEY")
         if not api_key:
-            raise ValueError("OpenAI API key is required")
+            raise ValueError("EC2 Endpoint key is required")
         
         # Convert products to the expected format
         product_dict = {}
@@ -66,7 +66,7 @@ class InfoCollectionAgent:
         self.llm = ChatOpenAI(
             temperature=0.7, 
             api_key=api_key, 
-            model="gpt-4",  # Updated to a valid model
+            model="gpt-4o-mini",  
             streaming=True  # Enable streaming
         )
         
