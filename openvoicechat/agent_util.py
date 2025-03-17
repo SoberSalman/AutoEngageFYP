@@ -252,12 +252,36 @@ def run_chat_agent(
 ):
     """
     Enhanced chat function that uses LangChain agent to collect user information.
-    Now with timing measurements.
+    Now with parallel sentence processing for faster responses.
     """
     print("Running INFO AGENT")
     
     # Initialize user information tracker
     user_info = UserInformation()
+    
+    def process_response_by_sentences(response):
+        """Break response into sentences and process through TTS incrementally"""
+        # Split response into sentences
+        sentences = []
+        for sep in ['. ', '! ', '? ', '.\n', '!\n', '?\n']:
+            parts = response.split(sep)
+            if len(parts) > 1:
+                for i in range(len(parts) - 1):
+                    sentences.append(parts[i] + sep.strip())
+                # Last part may be a partial sentence
+                if parts[-1].strip():
+                    sentences.append(parts[-1].strip())
+                break
+        
+        # If no sentence breaks, treat as one sentence
+        if not sentences and response.strip():
+            sentences = [response.strip()]
+        
+        # Process each sentence through TTS
+        for sentence in sentences:
+            if sentence.strip():
+                cleaned_sentence = clean_text_for_tts(sentence.strip())
+                mouth.say_text(cleaned_sentence)
     
     try:
         # Import here to avoid circular imports
@@ -329,11 +353,12 @@ def run_chat_agent(
             chatbot.messages.append({"role": "user", "content": user_input})
             chatbot.messages.append({"role": "assistant", "content": response})
             
-            cleaned_response = clean_text_for_tts(response)
-
-            # Time TTS
+            # Time TTS (for the whole process)
             tts_start = time.time()
-            mouth.say_text(cleaned_response)
+            
+            # Process by sentences for faster response
+            process_response_by_sentences(response)
+            
             tts_end = time.time()
             if timing_callback:
                 timing_callback("tts", tts_start, tts_end)
