@@ -3,149 +3,553 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Organization</title>
-    <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <title>Create Organization | Autoengage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/animations.css">
     <style>
+        .page-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(54, 116, 181, 0.05) 0%, rgba(209, 248, 239, 0.1) 100%);
+        }
+        
+        .page-header {
+            padding: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            animation: fadeInDown 0.7s ease;
+        }
+        
+        .form-card {
+            background-color: rgba(18, 19, 22, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(161, 227, 249, 0.15);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-section-title {
+            color: var(--primary-light);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(161, 227, 249, 0.3);
+        }
+        
+        .form-control {
+            background-color: rgba(54, 116, 181, 0.1);
+            border: 1px solid rgba(161, 227, 249, 0.3);
+            border-radius: 8px;
+            color: var(--light);
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background-color: rgba(54, 116, 181, 0.2);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        label {
+            color: var(--primary-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
         .required-asterisk {
-            color: var(--red-brand);
+            color: #e74c3c;
             font-weight: bold;
         }
-
+        
+        .custom-hr {
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            height: 1px;
+            border: none;
+            margin: 2rem 0;
+        }
+        
+        .product-entry {
+            background-color: rgba(54, 116, 181, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            border: 1px solid rgba(161, 227, 249, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .product-entry:hover {
+            background-color: rgba(54, 116, 181, 0.15);
+            border-color: rgba(161, 227, 249, 0.2);
+        }
+        
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .product-number {
+            font-weight: 600;
+            color: var(--primary-light);
+            font-size: 1.1rem;
+        }
+        
         .add-product-button {
-            background-color: var(--yellow-brand);
-            border: 0.07vw solid var(--yellow-brand);
-            border-radius: 1.25vw;
-            color: var(--black-brand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(54, 116, 181, 0.2);
+            color: var(--primary-light);
+            border: 1px solid var(--primary-light);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
             cursor: pointer;
-            margin-bottom: 1vw;
-            padding: 0.5vw 1.25vw;
-            transition: background-color 0.5s, border 0.5s, color 0.5s;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            width: auto;
         }
-
+        
         .add-product-button:hover {
-            background-color: var(--black-brand);
-            border: 0.07vw solid var(--white-brand);
-            color: var(--yellow-brand);
+            background-color: var(--primary-light);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
+        
         .remove-product-button {
-            background-color: var(--red-brand);
-            border: 0.07vw solid var(--red-brand);
-            border-radius: 1.25vw;
-            color: var(--black-brand);
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+            border-radius: 50px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 1vw;
-            padding: 0.5vw 1.25vw;
-            transition: background-color 0.5s, border 0.5s, color 0.5s;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
         }
-
+        
         .remove-product-button:hover {
-            background-color: var(--black-brand);
-            border: 0.07vw solid var(--white-brand);
-            color: var(--red-brand);
+            background-color: #e74c3c;
+            color: white;
         }
-
+        
+        .form-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
         .loading {
-            display: none; /* Hidden by default */
-            margin-top: 1rem; /* Added space below the URL field */
+            display: none;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(54, 116, 181, 0.1);
+            border-radius: 8px;
+            animation: pulse 2s infinite;
         }
-
+        
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-width: 0.2rem;
+            margin-right: 1rem;
+        }
+        
+        #outputLinkContainer {
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #2ecc71;
+        }
+        
         #outputLink {
-            color: var(--yellow-brand); /* Assuming you have a CSS variable for yellow */
-            font-weight: lighter;
+            color: #2ecc71;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
-
+        
         #outputLink:hover {
-            color: var(--white-brand); /* Change color on hover if needed */
-            font-weight: bold; /* Optional: Make the text bold */
-            text-decoration: underline; /* Optional: Underline the link */
+            background-color: rgba(46, 204, 113, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .url-field-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .url-field {
+            flex-grow: 1;
+        }
+        
+        .pages-field {
+            width: 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .url-field-container {
+                flex-direction: column;
+            }
+            
+            .pages-field {
+                width: 100%;
+            }
+        }
+        
+        /* Animated background */
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(161, 227, 249, 0.1);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: bubble 25s infinite ease-in;
+        }
+        
+        .bubble:nth-child(1) {
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 25s;
+        }
+        
+        .bubble:nth-child(2) {
+            left: 20%;
+            width: 20px;
+            height: 20px;
+            animation-duration: 30s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(3) {
+            left: 35%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 28s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(4) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-duration: 22s;
+            animation-delay: 0s;
+        }
+        
+        .bubble:nth-child(5) {
+            left: 65%;
+            width: 50px;
+            height: 50px;
+            animation-duration: 20s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(6) {
+            left: 80%;
+            width: 35px;
+            height: 35px;
+            animation-duration: 18s;
+            animation-delay: 3s;
+        }
+        
+        .bubble:nth-child(7) {
+            left: 32%;
+            width: 40px;
+            height: 40px;
+            animation-duration: 26s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(8) {
+            left: 55%;
+            width: 15px;
+            height: 15px;
+            animation-duration: 24s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(9) {
+            left: 25%;
+            width: 30px;
+            height: 30px;
+            animation-duration: 20s;
+            animation-delay: 4s;
+        }
+        
+        .bubble:nth-child(10) {
+            left: 85%;
+            width: 45px;
+            height: 45px;
+            animation-duration: 27s;
+            animation-delay: 2s;
+        }
+        
+        @keyframes bubble {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.6;
+                border-radius: 50%;
+            }
+            
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="page-wrapper is--home">
+    <div class="page-container">
         <div class="navbar">
             <a href="/" class="navbar-brand">
                 <h1>autoengage</h1>
             </a>
             <div class="button-container">
-                <button type="submit" class="action2-button" onclick="redirectToUserDashboard()">Dashboard</button>
+                <button type="button" class="action1-button btn-icon" onclick="redirectToUserDashboard()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Dashboard
+                </button>
             </div>
         </div>
-        <div class="section-container">
-            <div class="section-header">CREATE ORGANIZATION</div>
-            <div class="section-content">
-                <form id="organizationForm" method="post" action="/create-organization">
-                    <div class="form-group">
-                        <label for="organization_name">Organization Name <span class="required-asterisk">*</span></label>
-                        <input type="text" id="organization_name" name="organization_name" class="form-control" placeholder="Organization" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="organization_description">Organization Description</label>
-                        <textarea id="organization_description" name="organization_description" class="form-control" rows="5"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="target_audience">Target Audience</label>
-                        <input type="text" id="target_audience" name="target_audience" class="form-control">
-                    </div>
-                    <hr class="custom-hr">
-                    <div id="productsSection">
-                        <div class="form-group product-entry">
-                            <label for="product1">Product/Service 1</label>
-                            <input type="text" class="form-control mb-2" id="product1" name="product1" placeholder="Name" required>
-                            <textarea class="form-control mb-2" id="description1" name="description1" placeholder="Description" rows="2"></textarea>
-                            <textarea class="form-control mb-2" id="feature1" name="feature1" placeholder="Feature" rows="2"></textarea>
-                            <button type="button" class="remove-product-button" onclick="removeProduct(this)">-</button>
-                        </div>
-                    </div>
-                    <button type="button" class="add-product-button" id="addProductBtn">+</button>
-                    <div class="form-group">
-                        <label for="other_details">Other Details</label>
-                        <textarea class="form-control" id="other_details" name="other_details" rows="4"></textarea>
-                    </div>
-                    <div class="form-group" style="display: flex; align-items: center;">
-                        <div style="flex: 3; margin-right: 10px;">
-                            <label for="website_url">Website URL</label>
-                            <input type="url" id="website_url" name="website_url" class="form-control" style="width: 100%;font-size: small;" value="http://www.yourwebsite.com">
-                        </div>
-                        <div style="flex: 1;">
-                            <label for="max_pages_to_crawl">Max Pgs. to Crawl</label>
-                            <input type="number" id="max_pages_to_crawl" name="max_pages_to_crawl" class="form-control" min="1" max="20" placeholder="Max Pages" value=5>
-                        </div>
-                    </div>
-                    <small class="form-text text-muted">Enter the URL of your organization's website. Note: You cannot create the organization until you crawl a website or clear this input.</small>
-                    <button type="button" class="add-product-button" id="crawlButton">Crawl Website</button>
-                </div>
-                    <div class="loading" id="loading" style="color:white">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <span id="loadingText" style="margin-left: 20px; vertical-align: bottom; color: rgb(255, 255, 255);">Crawling through your website...</span>
-                    </div>
-                    <div id="outputLinkContainer" style="display: none; margin-top: 10px;">
-                        <a id="outputLink" href="#" target="_blank">View Crawled Output!</a>
-                    </div>                    
-                    <button type="submit" class="action3-button" id="createOrgButton">Create Organization</button>
-                </form>
+        
+        <div class="container py-4">
+            <div class="page-header">
+                <h1 class="page-title">Create Organization</h1>
+                <p class="text-muted">Set up your organization to start building your team</p>
             </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="form-card">
+                        <form id="organizationForm" method="post" action="/create-organization">
+                            <div class="form-section">
+                                <h3 class="form-section-title">Organization Details</h3>
+                                <div class="form-group">
+                                    <label for="organization_name">Organization Name <span class="required-asterisk">*</span></label>
+                                    <input type="text" id="organization_name" name="organization_name" class="form-control" placeholder="Organization" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="organization_description">Organization Description</label>
+                                    <textarea id="organization_description" name="organization_description" class="form-control" rows="4" placeholder="Describe what your organization does"></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="target_audience">Target Audience</label>
+                                    <input type="text" id="target_audience" name="target_audience" class="form-control" placeholder="Who are your customers?">
+                                </div>
+                            </div>
+                            
+                            <div class="custom-hr"></div>
+                            
+                            <div class="form-section">
+                                <h3 class="form-section-title">Products & Services</h3>
+                                <div id="productsSection">
+                                    <div class="product-entry animate-on-view">
+                                        <div class="product-header">
+                                            <div class="product-number">Product/Service 1</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="product1">Name <span class="required-asterisk">*</span></label>
+                                            <input type="text" class="form-control" id="product1" name="product1" placeholder="Product or service name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description1">Description</label>
+                                            <textarea class="form-control" id="description1" name="description1" placeholder="What does this product/service offer?" rows="2"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="feature1">Key Features</label>
+                                            <textarea class="form-control" id="feature1" name="feature1" placeholder="List key features or benefits" rows="2"></textarea>
+                                        </div>
+                                        <button type="button" class="remove-product-button" onclick="removeProduct(this)">×</button>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="add-product-button" id="addProductBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Add Product/Service
+                                </button>
+                            </div>
+                            
+                            <div class="custom-hr"></div>
+                            
+                            <div class="form-section">
+                                <h3 class="form-section-title">Additional Information</h3>
+                                <div class="form-group">
+                                    <label for="other_details">Other Details</label>
+                                    <textarea class="form-control" id="other_details" name="other_details" rows="4" placeholder="Any other relevant information about your organization"></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Website Information</label>
+                                    <div class="url-field-container">
+                                        <div class="url-field">
+                                            <input type="url" id="website_url" name="website_url" class="form-control" placeholder="https://www.example.com" value="http://www.yourwebsite.com">
+                                            <small class="form-text">Enter your organization's website URL</small>
+                                        </div>
+                                        <div class="pages-field">
+                                            <input type="number" id="max_pages_to_crawl" name="max_pages_to_crawl" class="form-control" min="1" max="20" placeholder="Pages" value="5">
+                                            <small class="form-text">Max pages</small>
+                                        </div>
+                                    </div>
+                                    <small class="form-text">Note: You cannot create the organization until you crawl a website or clear this input.</small>
+                                </div>
+                                
+                                <button type="button" class="action1-button btn-icon" id="crawlButton">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                    </svg>
+                                    Crawl Website
+                                </button>
+                                
+                                <div class="loading" id="loading">
+                                    <div class="spinner-border text-light" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <span id="loadingText" style="color: var(--light);">Crawling through your website...</span>
+                                </div>
+                                
+                                <div id="outputLinkContainer" style="display: none;">
+                                    <a id="outputLink" href="#" target="_blank">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                        View Crawled Output!
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="action1-button" onclick="redirectToUserDashboard()">Cancel</button>
+                                <button type="submit" class="action3-button btn-icon" id="createOrgButton">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="8.5" cy="7" r="4"></circle>
+                                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                                    </svg>
+                                    Create Organization
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated background bubbles -->
+        <div class="bg-bubbles">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
         </div>
     </div>
-    <br>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function redirectToUserDashboard() {
+            window.location.href = '/user-dashboard';
+        }
+
         document.getElementById("max_pages_to_crawl").addEventListener("input", function() {
             const maxPagesInput = this.value.trim();
             const maxPages = parseInt(maxPagesInput, 10);
 
             // Validate the max pages input
             if (maxPages < 1 || maxPages > 20) {
-                alert("Please enter a value between 1 and 20.");
-                this.value = ""; // Clear the input if invalid
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Invalid Value',
+                    text: 'Please enter a value between 1 and 20.',
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
+                this.value = "5"; // Reset to default
             }
         });
+        
         document.getElementById("website_url").addEventListener("input", function() {
             const websiteURL = this.value.trim();
             const createOrgButton = document.getElementById("createOrgButton");
@@ -158,10 +562,19 @@
             const websiteURL = document.getElementById("website_url").value;
             let maxPages = parseInt(document.getElementById("max_pages_to_crawl").value, 10);
             document.getElementById("createOrgButton").disabled = true;
+            
             // Validate the URL
             const urlPattern = /^(https?:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\- .\/?%&=]*)?[^\/\\]$/;
             if (!websiteURL.trim() || !urlPattern.test(websiteURL)) {
-                alert("Please enter a valid website URL. Add http(s):// at the start and remove any forward or backward slashes at the end.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid URL',
+                    text: 'Please enter a valid website URL. Add http(s):// at the start and remove any forward or backward slashes at the end.',
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
                 return;
             }
 
@@ -237,6 +650,17 @@
                                 outputLinkContainer.style.display = "block";
                                 document.getElementById("createOrgButton").disabled = false;
 
+                                // Show success message
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Website Crawled Successfully',
+                                    text: 'Your website has been crawled and the information has been extracted.',
+                                    confirmButtonText: 'Great!',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
+                                });
+
                                 // Now stop loading
                                 clearInterval(loadingInterval); // Clear the loading text interval
                                 document.getElementById("loading").style.display = "none";
@@ -244,57 +668,273 @@
                             .catch(error => {
                                 console.error('Error fetching condensed output:', error);
                                 clearInterval(loadingInterval); // Stop loading in case of error
-                                document.getElementById("loading").innerText = "An error occurred. Please try again.";
+                                document.getElementById("loading").style.display = "none";
+                                
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'An error occurred while processing your website data.',
+                                    confirmButtonText: 'Try Again',
+                                    confirmButtonColor: '#3674B5',
+                                    background: '#1c1c1c',
+                                    color: '#fff'
+                                });
                             });
                         }
                     })
                     .catch(error => {
                         // Handle errors and hide loading text
                         clearInterval(loadingInterval); // Clear the loading text interval
-                        document.getElementById("loading").innerText = "An error occurred. Please try again.";
+                        document.getElementById("loading").style.display = "none";
                         console.error('Error during crawl:', error);
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Crawl Failed',
+                            text: 'An error occurred while crawling your website.',
+                            confirmButtonText: 'Try Again',
+                            confirmButtonColor: '#3674B5',
+                            background: '#1c1c1c',
+                            color: '#fff'
+                        });
                     });
                 }
             })
             .catch(error => {
                 // Handle errors and hide loading text
                 clearInterval(loadingInterval); // Clear the loading text interval
-                document.getElementById("loading").innerText = "An error occurred while updating the config. Please try again.";
+                document.getElementById("loading").style.display = "none";
                 console.error('Error updating config:', error);
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Configuration Error',
+                    text: 'An error occurred while updating the configuration.',
+                    confirmButtonText: 'Try Again',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
             });
-
-
-
         };
-
-
 
         // Function to add a new product entry
         document.getElementById("addProductBtn").onclick = function() {
             const productsSection = document.getElementById("productsSection");
             const productCount = productsSection.getElementsByClassName("product-entry").length + 1;
+            
+            if (productCount > 3) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Maximum Products Reached',
+                    text: 'You can add up to 3 products/services.',
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
+                return;
+            }
 
             const newProductEntry = document.createElement("div");
-            newProductEntry.classList.add("form-group", "product-entry");
+            newProductEntry.classList.add("product-entry", "animate-on-view");
             newProductEntry.innerHTML = `
-                <label for="product${productCount}">Product/Service ${productCount}</label>
-                <input type="text" class="form-control mb-2" id="product${productCount}" name="product${productCount}" placeholder="Name">
-                <textarea class="form-control mb-2" id="description${productCount}" name="description${productCount}" placeholder="Description" rows="2"></textarea>
-                <textarea class="form-control mb-2" id="feature${productCount}" name="feature${productCount}" placeholder="Feature" rows="2"></textarea>
-                <button type="button" class="remove-product-button" onclick="removeProduct(this)">-</button>
+                <div class="product-header">
+                    <div class="product-number">Product/Service ${productCount}</div>
+                </div>
+                <div class="form-group">
+                    <label for="product${productCount}">Name</label>
+                    <input type="text" class="form-control" id="product${productCount}" name="product${productCount}" placeholder="Product or service name">
+                </div>
+                <div class="form-group">
+                    <label for="description${productCount}">Description</label>
+                    <textarea class="form-control" id="description${productCount}" name="description${productCount}" placeholder="What does this product/service offer?" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="feature${productCount}">Key Features</label>
+                    <textarea class="form-control" id="feature${productCount}" name="feature${productCount}" placeholder="List key features or benefits" rows="2"></textarea>
+                </div>
+                <button type="button" class="remove-product-button" onclick="removeProduct(this)">×</button>
             `;
+            
+            // Initially invisible for animation
+            newProductEntry.style.opacity = 0;
+            newProductEntry.style.transform = 'translateY(20px)';
+            
             productsSection.appendChild(newProductEntry);
+            
+            // Trigger animation
+            setTimeout(() => {
+                newProductEntry.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                newProductEntry.style.opacity = 1;
+                newProductEntry.style.transform = 'translateY(0)';
+            }, 10);
         };
 
         // Function to remove a product entry
         function removeProduct(button) {
             const productEntry = button.closest(".product-entry");
-            productEntry.remove();
+            
+            // Fade out animation
+            productEntry.style.opacity = 0;
+            productEntry.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                productEntry.remove();
+                
+                // Renumber remaining products
+                const productsSection = document.getElementById("productsSection");
+                const productEntries = productsSection.getElementsByClassName("product-entry");
+                
+                for (let i = 0; i < productEntries.length; i++) {
+                    const entry = productEntries[i];
+                    const productNumber = i + 1;
+                    
+                    entry.querySelector('.product-number').textContent = `Product/Service ${productNumber}`;
+                    
+                    // Update IDs and names
+                    entry.querySelector(`input[type="text"]`).id = `product${productNumber}`;
+                    entry.querySelector(`input[type="text"]`).name = `product${productNumber}`;
+                    entry.querySelectorAll('textarea')[0].id = `description${productNumber}`;
+                    entry.querySelectorAll('textarea')[0].name = `description${productNumber}`;
+                    entry.querySelectorAll('textarea')[1].id = `feature${productNumber}`;
+                    entry.querySelectorAll('textarea')[1].name = `feature${productNumber}`;
+                }
+            }, 300);
         }
-
-
-
         
+        // Form submission
+        document.getElementById('organizationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const organizationName = document.getElementById('organization_name').value.trim();
+            if (!organizationName) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Information',
+                    text: 'Please enter an organization name.',
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
+                return;
+            }
+            
+            // Show loading state
+            Swal.fire({
+                title: 'Creating Organization',
+                text: 'Please wait while we create your organization...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                background: '#1c1c1c',
+                color: '#fff'
+            });
+            
+            // Create a FormData object for the form submission
+            const formData = new FormData(this);
+            
+            // Gather product data
+            const products = [];
+            const productsSection = document.getElementById("productsSection");
+            const productEntries = productsSection.getElementsByClassName("product-entry");
+            
+            for (let i = 0; i < productEntries.length; i++) {
+                const entry = productEntries[i];
+                const productNumber = i + 1;
+                
+                const productName = document.getElementById(`product${productNumber}`).value.trim();
+                const productDescription = document.getElementById(`description${productNumber}`).value.trim();
+                const productFeature = document.getElementById(`feature${productNumber}`).value.trim();
+                
+                if (productName || productDescription || productFeature) {
+                    products.push({
+                        name: productName,
+                        description: productDescription,
+                        feature: productFeature
+                    });
+                }
+            }
+            
+            // Add products to form data
+            formData.append('products', JSON.stringify(products));
+            
+            // Submit the form
+            fetch('/create-organization', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: `The organization "${organizationName}" has been created successfully!`,
+                        confirmButtonText: 'Go to Dashboard',
+                        confirmButtonColor: '#3674B5',
+                        background: '#1c1c1c',
+                        color: '#fff'
+                    }).then(() => {
+                        window.location.href = '/user-dashboard';
+                    });
+                } else if (data && data.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.error,
+                        confirmButtonText: 'Try Again',
+                        confirmButtonColor: '#3674B5',
+                        background: '#1c1c1c',
+                        color: '#fff'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Unexpected Error',
+                    text: 'Something went wrong. Please try again later.',
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#3674B5',
+                    background: '#1c1c1c',
+                    color: '#fff'
+                });
+                console.error('Error:', error);
+            });
+        });
+        
+        // Add animations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                if (!button.classList.contains('btn-ripple')) {
+                    button.classList.add('btn-ripple');
+                }
+            });
+            
+            // Animate form sections
+            const formSections = document.querySelectorAll('.form-section');
+            formSections.forEach((section, index) => {
+                section.style.opacity = 0;
+                section.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    section.style.opacity = 1;
+                    section.style.transform = 'translateY(0)';
+                }, 100 + (index * 200));
+            });
+        });
     </script>
 </body>
 </html>

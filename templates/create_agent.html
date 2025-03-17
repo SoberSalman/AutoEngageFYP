@@ -3,92 +3,417 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Create Agent</title>
-        <link rel="stylesheet" href="https://cdn.prod.website-files.com/64ab4ca244ef5156093937b6/css/hafizs-site-50bf7724.webflow.8adc301e9.min.css" type="text/css"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <title>Create Agent | Autoengage</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../static/styles.css">
+        <link rel="stylesheet" href="../static/animations.css">
         <style>
+            .page-container {
+                min-height: 100vh;
+                background: linear-gradient(135deg, rgba(54, 116, 181, 0.05) 0%, rgba(209, 248, 239, 0.1) 100%);
+            }
+            
+            .page-header {
+                padding: 1.5rem 0;
+                position: relative;
+                overflow: hidden;
+                text-align: center;
+            }
+            
+            .page-title {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+                color: var(--accent);
+                animation: fadeInDown 0.7s ease;
+            }
+            
+            .form-card {
+                background-color: rgba(18, 19, 22, 0.7);
+                backdrop-filter: blur(10px);
+                border-radius: 16px;
+                padding: 2rem;
+                border: 1px solid rgba(161, 227, 249, 0.15);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                animation: fadeIn 0.5s ease;
+            }
+            
+            .form-section {
+                margin-bottom: 2rem;
+                animation: fadeIn 0.5s ease;
+            }
+            
+            .form-section-title {
+                color: var(--primary-light);
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px solid rgba(161, 227, 249, 0.3);
+            }
+            
+            .form-control {
+                background-color: rgba(54, 116, 181, 0.1);
+                border: 1px solid rgba(161, 227, 249, 0.3);
+                border-radius: 8px;
+                color: var(--light);
+                padding: 0.75rem 1rem;
+                transition: all 0.3s ease;
+            }
+            
+            .form-control:focus {
+                background-color: rgba(54, 116, 181, 0.2);
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+                position: relative;
+            }
+            
+            label {
+                color: var(--primary-light);
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+                display: block;
+            }
+            
             .required-asterisk {
-                color: var(--red-brand);
+                color: #e74c3c;
                 font-weight: bold;
+            }
+            
+            .form-check {
+                display: flex;
+                align-items: center;
+                margin-bottom: 0.5rem;
+            }
+            
+            .form-check-input {
+                margin-top: 0;
+                margin-right: 0.5rem;
+            }
+            
+            .custom-switch {
+                padding-left: 2.5rem;
+            }
+            
+            .custom-control-label {
+                padding-top: 0.15rem;
+            }
+            
+            .custom-control-input:checked ~ .custom-control-label::before {
+                background-color: var(--primary-light);
+                border-color: var(--primary-light);
+            }
+            
+            .custom-hr {
+                background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+                height: 1px;
+                border: none;
+                margin: 2rem 0;
+            }
+            
+            .info-alert {
+                background-color: rgba(54, 116, 181, 0.15);
+                border-left: 4px solid var(--primary-light);
+                border-radius: 4px;
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                animation: fadeIn 0.5s ease;
+            }
+            
+            .select-wrapper {
+                position: relative;
+                width: 100%;
+            }
+            
+            .select-dropdown {
+                width: 100%;
+                padding: 0.85rem 1rem;
+                color: #a1e3f9;
+                background-color: #15202b;
+                border: 1px solid #2a364c;
+                border-radius: 8px;
+                appearance: none;
+                -webkit-appearance: none;
+                cursor: pointer;
+            }
+            
+            .select-dropdown:focus {
+                outline: none;
+                border-color: #a1e3f9;
+            }
+            
+            /* Custom triangle dropdown indicator */
+            .select-wrapper:after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 15px;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-top: 6px solid #a1e3f9;
+                pointer-events: none;
+            }
+            
+            /* Rounded buttons styling */
+            .form-actions {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 2rem;
+            }
+
+
+                        .action-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 1px solid;
+            }
+            
+            .cancel-button {
+                background-color: transparent;
+                color: #a1e3f9;
+                border-color: #a1e3f9;
+            }
+            
+            .cancel-button:hover {
+                background-color: rgba(161, 227, 249, 0.1);
+            }
+            
+            .create-button {
+                background-color: transparent;
+                color: #a1e3f9;
+                border-color: #a1e3f9;
+            }
+            
+            .create-button:hover {
+                background-color: rgba(161, 227, 249, 0.15);
+            }
+            
+            /* Custom styling for checkbox */
+            .custom-checkbox {
+                display: flex;
+                align-items: center;
+                position: relative;
+                cursor: pointer;
+                padding-left: 30px;
+                margin-bottom: 1rem;
+            }
+            
+            .custom-checkbox input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+            
+            .checkmark {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 20px;
+                width: 20px;
+                border: 2px solid var(--primary-light);
+                border-radius: 4px;
+                background-color: transparent;
+                transition: all 0.2s ease;
+            }
+            
+            .custom-checkbox:hover input ~ .checkmark {
+                background-color: rgba(161, 227, 249, 0.1);
+            }
+            
+            .custom-checkbox input:checked ~ .checkmark {
+                background-color: var(--primary-light);
+            }
+            
+            .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+            
+            .custom-checkbox input:checked ~ .checkmark:after {
+                display: block;
+            }
+            
+            .custom-checkbox .checkmark:after {
+                left: 6px;
+                top: 2px;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+            
+            @keyframes float {
+                0% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+                100% {
+                    transform: translateY(0px);
+                }
+            }
+            
+            .floating-icon {
+                animation: float 4s ease-in-out infinite;
+                display: inline-block;
+                margin-bottom: 1rem;
             }
         </style>
     </head>
     <body>
-        <div class="page-wrapper is--home">
+        <div class="page-container">
             <div class="navbar">
                 <a href="/" class="navbar-brand">
                     <h1>autoengage</h1>
                 </a>
                 <div class="button-container">
-                    <button type="button" class="action1-button" onclick="redirectToUserDashboard()">Dashboard</button>
-                    <button type="button" class="action2-button" onclick="redirectToLogin()">Logout</button>
+                    <button type="button" class="action1-button btn-icon" onclick="redirectToUserDashboard()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        Dashboard
+                    </button>
+                    <button type="button" class="action2-button btn-icon" onclick="redirectToLogin()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Logout
+                    </button>
                 </div>
             </div>
-            <div class="section-container">
-                <div class="section-header">CREATE AGENT</div>
-                <div class="section-content">
-                    <form id="agentForm" method="post" action="/create-agent">
-                        <div class="form-group">
-                            <label for="agent_name">Agent Name <span class="required-asterisk">*</span></label>
-                            <input type="text" class="form-control" id="agent_name" name="agent_name" required>
+            
+            <div class="container py-4">
+                <div class="page-header">
+                    <div class="floating-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary-light)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="22"></line>
+                        </svg>
+                    </div>
+                    <h1 class="page-title">Create Agent</h1>
+                    <p class="text-muted">Create a new AI voice agent for your team</p>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="form-card">
+                            <form id="agentForm" method="post" action="/create-agent">
+                                <div class="form-section">
+                                    <h3 class="form-section-title">Basic Information</h3>
+                                    <div class="form-group">
+                                        <label for="agent_name">Agent Name <span class="required-asterisk">*</span></label>
+                                        <input type="text" class="form-control" id="agent_name" name="agent_name" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="agent_function">Function of Agent <span class="required-asterisk">*</span></label>
+                                        <div class="select-wrapper">
+                                            <select class="select-dropdown" id="agent_function" name="agent_function" required>
+                                                <option value="" disabled selected>Select Function</option>
+                                                <option value="Sales">Sales</option>
+                                                <option value="Support">Support</option>
+                                                <option value="Information">Information Collection</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" id="info_collection_notice" style="display:none;">
+                                        <div class="info-alert">
+                                            <strong>Information Collection Mode:</strong> This agent will be configured to collect customer information including name, age, city, zipcode, and interest level. Collected information will be saved to a CSV file.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="form-section-title">Call Handling</h3>
+                                    <div class="form-group">
+                                        <label for="forwarding_criteria">Criteria for Forwarding Calls</label>
+                                        <textarea class="form-control" id="forwarding_criteria" name="forwarding_criteria" rows="4" placeholder="Specify conditions when calls should be forwarded to human agents"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Departments to Forward To:</label>
+                                        <div class="pl-2">
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" id="sales" name="departments" value="Sales">
+                                                <span class="checkmark"></span>
+                                                Sales
+                                            </label>
+                                            
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" id="technical_support" name="departments" value="Technical Support">
+                                                <span class="checkmark"></span>
+                                                Technical Support
+                                            </label>
+                                            
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" id="customer_service" name="departments" value="Customer Service">
+                                                <span class="checkmark"></span>
+                                                Customer Service
+                                            </label>
+                                        </div>
+                                        
+                                        <input type="text" class="form-control mt-3" id="other_department" name="other_department" placeholder="Other Department (Specify)">
+                                    </div>
+                                </div>
+                                
+                                <div class="custom-hr"></div>
+                                
+                                <div class="form-section">
+                                    <h3 class="form-section-title">Voice Settings</h3>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="use_elevenlabs" name="use_elevenlabs">
+                                            <label class="custom-control-label" for="use_elevenlabs">Use ElevenLabs Voice</label>
+                                        </div>
+                                        <small class="form-text text-muted">Enable premium voice quality with ElevenLabs</small>
+                                    </div>
+                                    
+                                    <div class="form-group" id="voice_id_group" style="display:none;">
+                                        <label for="voice_id">Select Voice</label>
+                                        <div class="select-wrapper">
+                                            <select class="form-control" id="voice_id" name="voice_id"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="action-button cancel-button" onclick="redirectToUserDashboard()">Cancel</button>
+                                    <button type="submit" class="action-button create-button">Create Agent</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="agent_function">Function of Agent <span class="required-asterisk">*</span></label>
-                            <select class="form-control" id="agent_function" name="agent_function" required>
-                                <option value="" disabled selected>Select Function</option>
-                                <option value="Sales">Sales</option>
-                                <option value="Support">Support</option>
-                                <option value="Information">Information Collection</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="info_collection_notice" style="display:none;">
-                            <div class="alert alert-info">
-                                <strong>Information Collection Mode:</strong> This agent will be configured to collect customer information including name, age, city, zipcode, and interest level. Collected information will be saved to a CSV file.
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="forwarding_criteria">Criteria for Forwarding Calls</label>
-                            <textarea class="form-control" id="forwarding_criteria" name="forwarding_criteria" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Departments to Forward To:</label><br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="sales" name="departments" value="Sales">
-                                <label class="form-check-label" for="sales">Sales</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="technical_support" name="departments" value="Technical Support">
-                                <label class="form-check-label" for="technical_support">Technical Support</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="customer_service" name="departments" value="Customer Service">
-                                <label class="form-check-label" for="customer_service">Customer Service</label>
-                            </div>
-
-                            <input type="text" class="form-control mt-2" id="other_department" name="other_department" placeholder="Other (Specify)">
-                        </div>
-                        <hr class="custom-hr">
-                        <div class="form-group">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="use_elevenlabs" name="use_elevenlabs">
-                                <label class="custom-control-label" for="use_elevenlabs">Use ElevenLabs STT</label>
-                            </div>
-                        </div>
-                        <div class="form-group" id="voice_id_group" style="display:none;">
-                            <label for="voice_id">Voice ID</label>
-                            <select class="form-control" id="voice_id" name="voice_id"></select>
-                        </div>
-                        <button type="submit" class="action3-button">Create Agent</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
+        
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             function redirectToUserDashboard() {
@@ -98,8 +423,7 @@
             function redirectToLogin() {
                 window.location.href = '/login';
             }
-        </script>        
-        <script>
+            
             const ELEVENLABS_VOICE_IDS = {
                 "Adam: Male, American, Middle-aged, Deep": "pNInz6obpgDQGcFmaJgB",
                 "Alice: Female, British, Middle-aged, Confident": "Xb7hH8MSUJpSbSDYk0k2",
@@ -146,7 +470,7 @@
                 "Paul: Male, American, Middle-aged, Authoritative": "5Q0t7uMcjvnagumLfvZi",
                 "Rachel: Female, American, Young, Calm": "21m00Tcm4TlvDq8ikWAM",
                 "Sam: Male, American, Young, Raspy": "yoZ06aMxZJJ28mfd3POQ",
-                "Sarah: Female, American, Young, Soft: ": "EXAVITQu4vr4xnSDxMaL",
+                "Sarah: Female, American, Young, Soft": "EXAVITQu4vr4xnSDxMaL",
                 "Serena: Female, American, Middle-aged, Pleasant": "pMsXgVXv3BLzUgSXRplE",
                 "Thomas: Male, American, Young, Calm": "GBv7mTt0atIp3Br8iCZE",
                 "Will: Male, American, Young, Friendly": "bIHbv24MWmeRgasZH58o",
@@ -154,14 +478,15 @@
 
             const voiceSelect = document.getElementById('voice_id');
 
+            // Populate voice options
             for (const [name, id] of Object.entries(ELEVENLABS_VOICE_IDS)) {
                 const option = document.createElement('option');
                 option.value = id;
                 option.textContent = name;
                 voiceSelect.appendChild(option);
             }
-        </script>
-        <script>
+
+            // Toggle voice ID select visibility based on checkbox
             document.getElementById("use_elevenlabs").addEventListener("change", function() {
                 var voiceIdGroup = document.getElementById("voice_id_group");
                 if (this.checked) {
@@ -170,89 +495,7 @@
                     voiceIdGroup.style.display = "none";
                 }
             });
-        </script>
-        <script>
-            document.querySelector('#agentForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const voiceIdInput = document.getElementById("voice_id").value.trim();
-
-                const ELEVENLABS_VOICE_IDS = {
-                    "Adam: Male, American, Middle-aged, Deep": "pNInz6obpgDQGcFmaJgB",
-                    "Alice: Female, British, Middle-aged, Confident": "Xb7hH8MSUJpSbSDYk0k2",
-                    "Antoni: Male, American, Young, Well-rounded": "ErXwobaYiN019PkySvjV",
-                    "Arnold: Male, American, Middle-aged, Crisp": "VR6AewLTigWG4xSOukaG",
-                    "Bill: Male, American, Old, Trustworthy": "pqHfZKP75CvOlQylNhV4",
-                    "Brian: Male, American, Middle-aged, Deep": "nPczCjzI2devNBz1zQrb",
-                    "Callum: Male, Transatlantic, Middle-aged, Intense": "N2lVS1w4EtoT3dr4eOWO",
-                    "Charlie: Male, Austrailian, Middle-aged, Natural": "IKne3meq5aSn9XLyUdCD",
-                    "Charlotte: Female, Swedish, Young, Seductive": "XB0fDUnXU5powFXDhCwa",
-                    "Chris: Male, American, Middle-aged, Casual": "iP95p4xoKVk53GoZ742B",
-                    "Clyde: Male, American, Middle-aged, War veteran": "2EiwWnXFnvU5JabPnv8n",
-                    "Daniel: Male, British, Middle-aged, Authoritative": "onwK4e9ZLuTAKqWW03F9",
-                    "Dave: Male, British, Young, Conversational": "CYw3kZ02Hs0563khs1Fj",
-                    "Domi: Female, American, Young, Strong": "AZnzlk1XvdvUeBnXmlld",
-                    "Dorothy: Female, British, Young, Pleasant": "ThT5KcBeYPX3keUQqHPh",
-                    "Drew: Male, American, Middle-aged, Well-rounded": "29vD33N1CtxCmqQRPOHJ",
-                    "Elli: Female, American, Young, Emotional": "MF3mGyEYCl7XYWbV9V6O",
-                    "Emily: Female, American, Young, Calm": "LcfcDJNUP1GQjkzn1xUU",
-                    "Eric: Male, American, Middle-aged, Friendly": "cjVigY5qzO86Huf0OWal",
-                    "Ethan: Male, American, Young, Soft": "g5CIjZEefAph4nQFvHAz",
-                    "Fin: Male, Irish, Old, Sailor": "D38z5RcWu1voky8WS1ja",
-                    "Freya: Female, American, Young, Expressive": "jsCqWAovK2LkecY7zXl4",
-                    "George: Male, British, Middle-aged, Warm": "JBFqnCBsd6RMkjVDRZzb",
-                    "Gigi: Female, American, Young, Childish": "jBpfuIE2acCO8z3wKNLl",
-                    "Giovanni: Male, Italian, Young, Foreigner": "zcAOhNBS3c14rBihAFp1",
-                    "Glinda: Female, American, Middle-aged, Witch": "z9fAnlkpzviPz146aGWa",
-                    "Grace: Female, American (South), Young, Pleasant": "oWAxZDx7w5VEj9dCyTzz",
-                    "Harry: Male, American, Young, Anxious": "SOYHLrjzK2X1ezoPC6cr",
-                    "James: Male, Australian, Old, Calm": "ZQe5CZNOzWyzPSCn5a3c",
-                    "Jeremy: Male, Irish, Young, Excited": "bVMeCyTHy58xNoL34h3p",
-                    "Jessica: Female, American, Young, Expressive": "cgSgspJ2msm6clMCkdW9",
-                    "Jessie: Male, American, Old, Raspy": "t0jbNlBVZ17f02VDIeMI",
-                    "Joseph: Male, British, Middle-aged, Articulate": "Zlb1dXrM653N07WRdFW3",
-                    "Josh: Male, American, Young, Deep": "TxGEqnHWrfWFTfGW9XjX",
-                    "Laura: Female, American, Young, Upbeat": "FGY2WhTYpPnrIDTdsKH5",
-                    "Liam: Male, American, Young, Articulate": "TX3LPaxmHKxFdv7VOQHJ",
-                    "Lily: Female, British, Middle-aged, Warm": "pFZP5JQG7iQjIQuC4Bku",
-                    "Matilda: Female, American, Middle-aged, Friendly": "XrExE9yKIg1WjnnlVkGX",
-                    "Michael: Male, American, Old, Calm": "flq6f7yk4E4fJM5XTYuZ",
-                    "Mimi: Female, Swedish, Young, Childish": "zrHiDhphv9ZnVXBqCLjz",
-                    "Nicole: Female, American, Young, Soft": "piTKgcLEGmPE4e6mEKli",
-                    "Patrick: Male, American, Middle-aged, Shouty": "ODq5zmih8GrVes37Dizd",
-                    "Paul: Male, American, Middle-aged, Authoritative": "5Q0t7uMcjvnagumLfvZi",
-                    "Rachel: Female, American, Young, Calm": "21m00Tcm4TlvDq8ikWAM",
-                    "Sam: Male, American, Young, Raspy": "yoZ06aMxZJJ28mfd3POQ",
-                    "Sarah: Female, American, Young, Soft: ": "EXAVITQu4vr4xnSDxMaL",
-                    "Serena: Female, American, Middle-aged, Pleasant": "pMsXgVXv3BLzUgSXRplE",
-                    "Thomas: Male, American, Young, Calm": "GBv7mTt0atIp3Br8iCZE",
-                    "Will: Male, American, Young, Friendly": "bIHbv24MWmeRgasZH58o",
-                };
-
-                if (document.getElementById("use_elevenlabs").checked && Object.values(ELEVENLABS_VOICE_IDS).includes(voiceIdInput)) {
-                    const voiceName = Object.keys(ELEVENLABS_VOICE_IDS).find(key => ELEVENLABS_VOICE_IDS[key] === voiceIdInput);
-                    const name = voiceName.split(' ')[0].replace(/:.*/, '');;
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'ElevenLabs Enabled',
-                        text: `The selected voice "${name}" with voice ID "${voiceIdInput}" will be used.`,
-                        confirmButtonText: 'Okay'
-                    }).then(() => {
-                        this.submit();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'ElevenLabs Disabled',
-                        text: `The default voice will be used.`,
-                        confirmButtonText: 'Okay'
-                    }).then(() => {
-                        this.submit();
-                    });
-                }
-            });
-        </script>
-        <script>
+            
             // Show/hide the information collection notice based on selection
             document.getElementById("agent_function").addEventListener("change", function() {
                 var infoNotice = document.getElementById("info_collection_notice");
@@ -261,6 +504,95 @@
                 } else {
                     infoNotice.style.display = "none";
                 }
+            });
+
+            // Form submission with validation and animation
+            document.querySelector('#agentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate required fields
+                const agentName = document.getElementById('agent_name').value.trim();
+                const agentFunction = document.getElementById('agent_function').value;
+                
+                if (!agentName || !agentFunction) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Information',
+                        text: 'Please fill in all required fields',
+                        confirmButtonText: 'Okay',
+                        confirmButtonColor: '#3674B5',
+                        background: '#1c1c1c',
+                        color: '#fff'
+                    });
+                    return;
+                }
+
+                // Process voice selection
+                const useElevenlabs = document.getElementById("use_elevenlabs").checked;
+                const voiceIdInput = document.getElementById("voice_id").value.trim();
+
+                if (useElevenlabs && Object.values(ELEVENLABS_VOICE_IDS).includes(voiceIdInput)) {
+                    const voiceName = Object.keys(ELEVENLABS_VOICE_IDS).find(key => ELEVENLABS_VOICE_IDS[key] === voiceIdInput);
+                    const name = voiceName.split(' ')[0].replace(/:.*/, '');
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ElevenLabs Voice Enabled',
+                        html: `<p>The selected voice <strong>"${name}"</strong> will be used.</p>
+                              <p>Creating your agent...</p>`,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        background: '#1c1c1c',
+                        color: '#fff',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    }).then(() => {
+                        this.submit();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Standard Voice',
+                        html: `<p>Using the default voice for your agent.</p>
+                              <p>Creating your agent...</p>`,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        background: '#1c1c1c',
+                        color: '#fff',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    }).then(() => {
+                        this.submit();
+                    });
+                }
+            });
+            
+            // Add animation to form sections
+            document.addEventListener('DOMContentLoaded', function() {
+                const formSections = document.querySelectorAll('.form-section');
+                
+                formSections.forEach((section, index) => {
+                    section.style.opacity = 0;
+                    section.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        section.style.opacity = 1;
+                        section.style.transform = 'translateY(0)';
+                    }, 100 + (index * 200));
+                });
+                
+                // Add ripple effect to buttons
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(button => {
+                    if (!button.classList.contains('btn-ripple')) {
+                        button.classList.add('btn-ripple');
+                    }
+                });
             });
         </script>
     </body>
