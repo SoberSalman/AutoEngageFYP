@@ -26,6 +26,10 @@ from openvoicechat.tts.tts_xtts import Mouth_xtts
 from openvoicechat.tts.tts_piper import Mouth_piper
 from openvoicechat.llm.llm_EC2 import Chatbot_LLM as Chatbot
 
+# Add these imports at the top of your app.py file
+from datetime import datetime, timedelta
+from sqlalchemy import func, text
+
 #from openvoicechat.stt.stt_hf import Ear_hf as Ear
 #from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
 
@@ -152,6 +156,137 @@ async def signup(
 @app.get("/login", response_class=HTMLResponse)
 async def login(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("login.html", {"request": request})
+
+
+
+# Complete analytics route implementation
+@app.get("/analytics")
+async def analytics(request: Request, db: Session = Depends(get_db)):
+    try:
+        result = validate_cookies(db, request, ["current_username", "current_organization"])
+        if not result["success"]:
+            return result["response"]
+        
+        cookies = result["cookies"]
+        current_username = cookies["current_username"]
+        current_organization = cookies["current_organization"]
+        
+        # Get organization details
+        organization = crud.get_organization_by_username(db, current_username)
+        if not organization:
+            return RedirectResponse(url="/error", status_code=404)
+        
+        # Get teams for this organization
+        teams = crud.get_teams_by_organization_id(db, organization.id)
+        
+        # Initialize empty team stats list
+        team_stats = []
+        
+        # Process each team
+        for team in teams:
+            # Get agents in this team
+            team_agents = crud.get_agents_by_team_id(db, team.id)
+            agent_stats = []
+            
+            team_total_calls = 0
+            team_total_response_time = 0
+            
+            # Process each agent
+            for agent in team_agents:
+                # Get chat history records for this agent
+                agent_chats = db.query(models.ChatHistory).filter(
+                    models.ChatHistory.organization_id == organization.id,
+                    models.ChatHistory.team_id == team.id,
+                    models.ChatHistory.agent_id == agent.id
+                ).all()
+                
+                # Calculate agent metrics
+                calls_count = len(agent_chats)
+                team_total_calls += calls_count
+                
+                # Get response times, filtering out None values
+                response_times = [chat.response_time for chat in agent_chats if chat.response_time is not None]
+                avg_response_time = sum(response_times) / len(response_times) if response_times else 0.0
+                team_total_response_time += avg_response_time if calls_count > 0 else 0
+                
+                agent_stats.append({
+                    "agent_name": agent.name,
+                    "calls_count": calls_count,
+                    "avg_response_time": avg_response_time
+                })
+            
+            # Calculate team average response time
+            team_avg_response_time = (
+                team_total_response_time / len(team_agents) 
+                if team_agents and len(team_agents) > 0 
+                else 0.0
+            )
+            
+            team_stats.append({
+                "team_name": team.name,
+                "team_calls": team_total_calls,
+                "team_avg_response_time": team_avg_response_time,
+                "agents": agent_stats
+            })
+        
+        # Get daily call data for charts (last 7 days)
+        daily_calls = []
+        today = datetime.now().date()
+        
+        # Generate data for last 7 days
+        for i in range(6, -1, -1):
+            date = today - timedelta(days=i)
+            date_str = date.strftime('%Y-%m-%d')
+            
+            # For SQLite, use string comparison for date filtering
+            day_start = date.strftime('%Y-%m-%d 00:00:00')
+            day_end = date.strftime('%Y-%m-%d 23:59:59')
+            
+            try:
+                # Count chats where timestamp is between day_start and day_end
+                day_chats = db.query(models.ChatHistory).filter(
+                    models.ChatHistory.organization_id == organization.id,
+                    models.ChatHistory.timestamp >= day_start,
+                    models.ChatHistory.timestamp <= day_end
+                ).count()
+            except Exception as e:
+                print(f"Error querying for date {date_str}: {e}")
+                # Fallback to direct string comparison if needed
+                try:
+                    # Alternative approach using substring extraction
+                    date_substr = date_str + "%"  # Using % as wildcard
+                    day_chats = db.query(models.ChatHistory).filter(
+                        models.ChatHistory.organization_id == organization.id,
+                        models.ChatHistory.timestamp.like(date_substr)
+                    ).count()
+                except Exception as e2:
+                    print(f"Secondary error querying for date {date_str}: {e2}")
+                    day_chats = 0
+            
+            daily_calls.append({
+                "date": date_str, 
+                "calls": day_chats
+            })
+        
+        return templates.TemplateResponse(
+            "analytics.html",
+            {
+                "request": request,
+                "organization": organization,
+                "team_stats": team_stats,
+                "daily_calls": daily_calls
+            }
+        )
+    except Exception as e:
+        # Log the error and return a friendly error page
+        print(f"Error in analytics route: {e}")
+        return templates.TemplateResponse(
+            "error.html",
+            {
+                "request": request,
+                "error_message": "An error occurred while loading analytics. Please try again later."
+            }
+        )
 
 
 # Endpoint for Login Page (POST Request)

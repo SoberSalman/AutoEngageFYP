@@ -1,29 +1,43 @@
-@font-face {
-    font-family: 'FutureBold';
-    src: url('../static/fonts/FutureBold.ttf') format('truetype');
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
 
 :root {
-    --black-brand: #121316;
-    --red-brand: #c8464b;
-    --white-brand: #ededed;
-    --yellow-brand: #fff250;
+    --primary-dark: #3674B5;  /* Dark blue */
+    --primary: #578FCA;       /* Medium blue */
+    --primary-light: #A1E3F9; /* Light blue */
+    --accent: #D1F8EF;        /* Very light blue/teal */
+    --dark: #121316;          /* Dark background */
+    --light: #f9f9f9;         /* Light text */
+    --danger: #e74c3c;        /* Error/danger red */
+    --success: #2ecc71;       /* Success green */
+    --warning: #f39c12;       /* Warning yellow/orange */
 }
 
 body {
+    background-color: var(--dark);
+    background-image: linear-gradient(135deg, rgba(54, 116, 181, 0.2) 0%, rgba(209, 248, 239, 0.1) 100%);
     background-attachment: fixed;
-    background-color: var(--black-brand);
-    background-repeat: no-repeat;
     background-size: cover;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: auto;
-    position: relative;
+    font-family: 'Poppins', sans-serif;
+    color: var(--light);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    transition: all 0.3s ease;
 }
 
 .navbar {
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: rgba(18, 19, 22, 0.8);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .navbar-brand {
@@ -31,120 +45,258 @@ body {
 }
 
 .navbar-brand h1 {
-    color: var(--white-brand);
-    font-family: "FutureBold", sans-serif;
-    font-size: 3vw;
+    color: var(--accent);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2.5rem;
+    margin: 0;
+    letter-spacing: -0.05em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 
-.navbar .button-container {
-    align-items: center;
+.navbar-brand h1:hover {
+    transform: scale(1.02);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.button-container {
     display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.action1-button {
-    background-color: var(--black-brand);
-    border: 0.07vw solid var(--white-brand);
-    border-radius: 1.25vw;
-    color: var(--white-brand);
+.action-button {
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
     cursor: pointer;
-    font-size: 1vw;
-    margin-left: 1vw;
-    padding: 0.5vw 1.25vw;
-    transition: background-color 0.5s, color 0.5s;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.action1-button:hover {
-    border-color: var(--yellow-brand);
-    color: var(--yellow-brand);
+.action1-button, .action-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-light);
+    color: var(--primary-light);
 }
 
-.action2-button {
-    background-color: var(--yellow-brand);
-    border: 0.07vw solid var(--yellow-brand);
-    border-radius: 1.25vw;
-    color: var(--black-brand);
-    cursor: pointer;
-    font-size: 1vw;
-    margin-left: 1vw;
-    padding: 0.5vw 1.25vw;
-    transition: background-color 0.5s, border 0.5s, color 0.5s;
+.action1-button:hover, .action-outline:hover {
+    background-color: var(--primary-light);
+    color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.action2-button:hover {
-    background-color: var(--black-brand);
-    border: 0.07vw solid var(--white-brand);
-    color: var(--yellow-brand);
+.action2-button, .action-filled {
+    background-color: var(--primary);
+    color: white;
+    border: 2px solid var(--primary);
 }
 
-.action3-button {
-    background-color: var(--yellow-brand);
-    border: 0.07vw solid var(--yellow-brand);
-    border-radius: 1.25vw;
-    color: var(--black-brand);
-    cursor: pointer;
-    margin-top: 1vw;
-    padding: 0.5vw 1.25vw;
-    transition: background-color 0.5s, border 0.5s, color 0.5s;
+.action2-button:hover, .action-filled:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.action3-button:hover {
-    background-color: var(--black-brand);
-    border: 0.07vw solid var(--white-brand);
-    color: var(--yellow-brand);
+.action3-button, .action-accent {
+    background-color: var(--accent);
+    color: var(--primary-dark);
+    border: 2px solid var(--accent);
+    font-weight: 600;
 }
 
-.action4-button {
-    background-color: var(--yellow-brand);
-    border: 0.07vw solid var(--yellow-brand);
-    border-radius: 1.25vw;
-    color: var(--black-brand);
-    cursor: pointer;
-    margin-top: 1vw;
-    padding: 0.5vw 1.25vw;
-    transition: background-color 0.5s, border 0.5s, color 0.5s;
-}
-
-.action4-button:hover {
-    background-color: var(--black-brand);
-    border: 0.07vw solid var(--white-brand);
-    color: var(--yellow-brand);
+.action3-button:hover, .action-accent:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .section-container {
-    background-color: rgb(18, 19, 22, 0.75);
-    border-color: rgba(255, 242, 80, 0.5);
-    border-radius: 2vw;
-    box-shadow: 0 0 0.7vw rgba(255, 242, 80, 0.75);
-    display: flex;
-    flex-direction: column;
-    gap: 1vw;
-    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
-    margin-bottom: 2%;
-    margin-left: 25%;
-    margin-top: 2%;
-    padding: 2vw;
-    width: 50%;
+    background-color: rgba(18, 19, 22, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 800px;
+    width: 90%;
+    animation: fadeIn 0.5s ease;
+    border: 1px solid rgba(161, 227, 249, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
 }
 
 .section-header {
-    color: var(--white-brand);
-    font-size: 3vw;
-    margin-bottom: 1vw;
+    color: var(--primary-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
     text-align: center;
+    position: relative;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-light), var(--accent));
+    transform: translateX(-50%);
+    border-radius: 2px;
 }
 
 .section-content {
-    color: var(--white-brand);
-    font-size: 1vw;
+    color: var(--light);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-light);
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(161, 227, 249, 0.3);
+    border-radius: 8px;
+    background-color: rgba(18, 19, 22, 0.5);
+    color: var(--light);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
+    outline: none;
+}
+
+.required-asterisk {
+    color: var(--danger);
+    font-weight: bold;
 }
 
 .custom-hr {
-    background: var(--white-brand);
     border: 0;
-    height: 0.07vw;
-    margin-top: 2vw;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+    margin: 2rem 0;
 }
 
-#checkbox-error {
+/* Password strength meter */
+.password-strength-meter {
+    height: 5px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-top: 0.5rem;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.password-strength-meter-fill {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength-text {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Lists */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    color: var(--primary-light);
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+ul li::before {
+    content: '•';
+    color: var(--accent);
+    position: absolute;
+    left: 0.5rem;
+}
+
+ul ul {
+    margin-left: 1.5rem;
+}
+
+/* Links */
+a {
+    color: var(--primary-light);
     text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .button-container {
+        margin-top: 1rem;
+    }
+    
+    .section-container {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .navbar-brand h1 {
+        font-size: 2rem;
+    }
+    
+    .section-header {
+        font-size: 1.75rem;
+    }
 }
