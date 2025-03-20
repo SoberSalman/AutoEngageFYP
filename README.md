@@ -21,7 +21,7 @@ Before we begin, ensure you have the following software installed:
 Use the following commands in your terminal to download the autoengage project files:
 
 ```bash
-git clone https://github.com/aamishrafique/autoengage.git
+git clone https://github.com/sobersalman/autoengage.git
 cd autoengage
 ```
 
