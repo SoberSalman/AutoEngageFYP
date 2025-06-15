@@ -1064,8 +1064,8 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
     if voice_id != None and voice_id != "None":  # Use ElevenLabs TTS
         print("Using ElevenLabs TTS")
         start = time.time()
-        #mouth = Mouth_elevenlabs(voice_id=voice_id, player=player)
-        mouth = Mouth_piper(player=player, device=DEVICE)
+        mouth = Mouth_elevenlabs(voice_id=voice_id, player=player)
+        # mouth = Mouth_piper(player=player, device=DEVICE)
         end = time.time()
         log_response_time("TTS Model (ElevenLabs) Loading Time", round(end - start, 3))
     elif voice_id == "None" or voice_id == None:  # Use piper
@@ -1293,7 +1293,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "app:app",
         host="0.0.0.0",
-        port=8000,
+        port=8001,
         reload=True,
         ssl_keyfile="keys/key.pem",
         ssl_certfile="keys/cert.pem",

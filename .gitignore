@@ -6,3 +6,6 @@ en_US-ryan-medium.onnx
 en_US-ryan-medium.onnx.json
 __pycache__/
 *.py[cod]
+*.env
+venv/
+*.wav
