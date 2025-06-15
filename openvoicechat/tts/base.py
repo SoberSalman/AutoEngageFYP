@@ -10,7 +10,7 @@ import os
 import pysbd
 from dotenv import load_dotenv
 import time
-from utils.logger import log_response_time, print_info, print_error, print_warning
+#from utils.logger import log_response_time, print_info, print_error, print_warning
 load_dotenv()
 
 TIMING = int(os.environ.get("TIMING", 0))
@@ -61,7 +61,7 @@ class BaseMouth:
         output = self.run_tts(text)
         end = time.time()
         duration = end - start
-        log_response_time("TTS Synthezied in Time", duration)
+        #log_response_time("TTS Synthezied in Time", duration)
         self.player.play(output, samplerate=self.sample_rate)
         #self.player.wait()
 
