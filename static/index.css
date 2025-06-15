@@ -102,7 +102,7 @@ body {
     background-color: transparent;
     border: 1px solid var(--white-brand);
     border-radius: 1vw;
-    color: var(--white-color);
+    color: var(--white-brand);
     font-size: 1.25vw;
     outline: none;
     padding: 1.7vw 0.7vw 0.7vw 0.7vw;
