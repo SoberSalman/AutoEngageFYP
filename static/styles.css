@@ -183,7 +183,7 @@ label {
     border: 1px solid rgba(161, 227, 249, 0.3);
     border-radius: 8px;
     background-color: rgba(18, 19, 22, 0.5);
-    color: var(--light);
+    color: var(--light) !important;
     transition: all 0.3s ease;
 }
 
@@ -191,6 +191,7 @@ label {
     border-color: var(--primary-light);
     box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
     outline: none;
+    color: var(--light) !important;
 }
 
 .required-asterisk {
@@ -290,8 +291,7 @@ a:hover {
     .section-container {
         width: 95%;
         padding: 1.5rem;
-    }
-    
+    }    
     .navbar-brand h1 {
         font-size: 2rem;
     }
@@ -299,4 +299,40 @@ a:hover {
     .section-header {
         font-size: 1.75rem;
     }
+}
+
+/* Comprehensive form input styling to ensure white text color */
+input, textarea, select {
+    color: var(--light) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    color: var(--light) !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: rgba(249, 249, 249, 0.6) !important;
+}
+
+/* Additional specific overrides for all input types */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"] {
+    color: var(--light) !important;
+}
+
+/* Ensure autofill doesn't override our colors */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--light) !important;
+    -webkit-box-shadow: 0 0 0 30px rgba(18, 19, 22, 0.5) inset !important;
 }
