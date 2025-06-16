@@ -24,6 +24,9 @@ from utils.prompts import get_products, get_prompt
 from openvoicechat.tts.tts_elevenlabs import Mouth_elevenlabs
 from openvoicechat.tts.tts_xtts import Mouth_xtts
 from openvoicechat.tts.tts_piper import Mouth_piper
+
+
+
 from openvoicechat.llm.llm_EC2 import Chatbot_LLM as Chatbot
 
 # Add these imports at the top of your app.py file
@@ -31,9 +34,9 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, text
 
 #from openvoicechat.stt.stt_hf import Ear_hf as Ear
-#from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
+from openvoicechat.stt.stt_deepgram import Ear_deepgram as Ear
 
-from openvoicechat.stt.stt_faster_whisper import Ear_faster_whisper as Ear
+# from openvoicechat.stt.stt_faster_whisper import Ear_faster_whisper as Ear
 
 from openvoicechat.utils import run_chat, Listener_ws, Player_ws,run_chat_langchain
 
@@ -1064,8 +1067,8 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
     if voice_id != None and voice_id != "None":  # Use ElevenLabs TTS
         print("Using ElevenLabs TTS")
         start = time.time()
-        #mouth = Mouth_elevenlabs(voice_id=voice_id, player=player)
-        mouth = Mouth_piper(player=player, device=DEVICE)
+        mouth = Mouth_elevenlabs(voice_id=voice_id, player=player)
+        # mouth = Mouth_piper(player=player, device=DEVICE)
         end = time.time()
         log_response_time("TTS Model (ElevenLabs) Loading Time", round(end - start, 3))
     elif voice_id == "None" or voice_id == None:  # Use piper
@@ -1075,21 +1078,21 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
         log_response_time("TTS Model (Piper) Loading Time", round(end - start, 3))
 
     start = time.time()
-    # ear = Ear(
-    #     api_key=DEEPGRAM_API_KEY,
-    #     silence_seconds=2.0,
-    #     listener=listener,
-    # )
-
     ear = Ear(
-    model_size="distil-large-v3",  # You can choose different sizes based on your needs
-    device=DEVICE,
-    compute_type="float16" if DEVICE == "cuda" else "int8",
-    silence_seconds=2.0,
-    listener=listener,
-    stream=True,  # Enable streaming mode for better timing
-    player=player
-)
+        api_key=DEEPGRAM_API_KEY,
+        silence_seconds=2.0,
+        listener=listener,
+    )
+
+#     ear = Ear(
+#     model_size="distil-large-v3",  # You can choose different sizes based on your needs
+#     device=DEVICE,
+#     compute_type="float16" if DEVICE == "cuda" else "int8",
+#     silence_seconds=2.0,
+#     listener=listener,
+#     stream=True,  # Enable streaming mode for better timing
+#     player=player
+# )
     end = time.time()
     log_response_time(f"STT Model Loading Time", round(end - start, 3))
 
@@ -1293,7 +1296,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "app:app",
         host="0.0.0.0",
-        port=8000,
+        port=8001,
         reload=True,
         ssl_keyfile="keys/key.pem",
         ssl_certfile="keys/cert.pem",
