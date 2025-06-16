@@ -79,9 +79,36 @@
                 background: linear-gradient(90deg, var(--primary-light), var(--accent));
                 transition: width 0.3s ease;
             }
-            
-            .form-control:focus + .input-highlight {
+              .form-control:focus + .input-highlight {
                 width: 100%;
+            }
+            
+            /* Make form more compact */
+            .form-group {
+                margin-bottom: 1rem !important;
+            }
+            
+            .form-control {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.9rem;
+            }
+            
+            label {
+                margin-bottom: 0.3rem !important;
+                font-size: 0.9rem;
+            }
+            
+            .custom-hr {
+                margin: 1rem 0 !important;
+            }
+            
+            .section-container {
+                padding: 1.5rem !important;
+            }
+            
+            .section-header {
+                margin-bottom: 1rem !important;
+                font-size: 1.75rem !important;
             }
         </style>
     </head>
@@ -99,8 +126,7 @@
             <div class="section-container form-container">
                 <div class="section-header">CREATE ACCOUNT</div>
                 <div class="section-content">
-                    <form id="signupForm" method="post" action="/signup">
-                        <div class="row">
+                    <form id="signupForm" method="post" action="/signup">                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">Full Name <span class="required-asterisk">*</span></label>
@@ -110,16 +136,16 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email Address <span class="required-asterisk">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
+                                    <label for="phone_number">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="+1 123-456-7890">
                                     <div class="input-highlight"></div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="+1 123-456-7890">
+                            <label for="email">Email Address <span class="required-asterisk">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
                             <div class="input-highlight"></div>
                         </div>
                         
