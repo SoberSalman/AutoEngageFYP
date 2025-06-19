@@ -1065,12 +1065,12 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
     voice_id = agent.voice_id
     print(f"Current Voice ID: {voice_id}")
     if voice_id != None and voice_id != "None":  # Use ElevenLabs TTS
-        print("Using ElevenLabs TTS")
+        print("Using chatterbox TTS")
         start = time.time()
         mouth = Mouth_elevenlabs(voice_id=voice_id, player=player)
         # mouth = Mouth_piper(player=player, device=DEVICE)
         end = time.time()
-        log_response_time("TTS Model (ElevenLabs) Loading Time", round(end - start, 3))
+        log_response_time("TTS Model (chatterbox) Loading Time", round(end - start, 3))
     elif voice_id == "None" or voice_id == None:  # Use piper
         start = time.time()
         mouth = Mouth_piper(player=player, device=DEVICE)

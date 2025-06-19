@@ -124,10 +124,102 @@
                 margin-bottom: 1.5rem;
                 animation: fadeIn 0.5s ease;
             }
-            
-            .select-wrapper {
+              .select-wrapper {
                 position: relative;
                 width: 100%;
+            }
+              .select-wrapper select.form-control {
+                width: 100% !important;
+                padding: 0.75rem 1rem !important;
+                color: var(--light) !important;
+                background-color: rgba(54, 116, 181, 0.1) !important;
+                border: 1px solid rgba(161, 227, 249, 0.3) !important;
+                border-radius: 8px !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                cursor: pointer !important;
+                transition: all 0.3s ease !important;
+                background-image: none !important;
+            }
+            
+            .select-wrapper select.form-control:focus {
+                outline: none !important;
+                border-color: var(--primary-light) !important;
+                background-color: rgba(54, 116, 181, 0.2) !important;
+                box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3) !important;
+                color: var(--light) !important;
+            }
+              /* Force option styling */
+            #voice_id option {
+                background-color: rgba(18, 19, 22, 0.95) !important;
+                color: var(--light) !important;
+                padding: 0.5rem !important;
+            }
+              /* Voice selection styling */
+            .voice-options {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 0.5rem;
+            }
+            
+            .voice-option {
+                background-color: rgba(54, 116, 181, 0.1);
+                border: 1px solid rgba(161, 227, 249, 0.3);
+                border-radius: 8px;
+                padding: 0.75rem;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                position: relative;
+            }
+            
+            .voice-option:hover {
+                background-color: rgba(54, 116, 181, 0.2);
+                border-color: var(--primary-light);
+            }
+            
+            .voice-option input[type="radio"] {
+                margin-right: 0.75rem;
+                width: 16px;
+                height: 16px;
+                accent-color: var(--primary-light);
+            }
+            
+            .voice-option input[type="radio"]:checked {
+                accent-color: var(--primary-light);
+            }
+            
+            .voice-option.selected {
+                background-color: rgba(54, 116, 181, 0.3);
+                border-color: var(--primary-light);
+            }
+            
+            .select-wrapper select {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                color: var(--light) !important;
+                background-color: rgba(54, 116, 181, 0.1);
+                border: 1px solid rgba(161, 227, 249, 0.3);
+                border-radius: 8px;
+                appearance: none;
+                -webkit-appearance: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .select-wrapper select:focus {
+                outline: none;
+                border-color: var(--primary-light);
+                background-color: rgba(54, 116, 181, 0.2);
+                box-shadow: 0 0 0 3px rgba(161, 227, 249, 0.3);
+            }
+            
+            .select-wrapper select option {
+                background-color: rgba(18, 19, 22, 0.95);
+                color: var(--light);
+                padding: 0.5rem;
             }
             
             .select-dropdown {
@@ -146,8 +238,7 @@
                 outline: none;
                 border-color: #a1e3f9;
             }
-            
-            /* Custom triangle dropdown indicator */
+              /* Custom triangle dropdown indicator */
             .select-wrapper:after {
                 content: '';
                 position: absolute;
@@ -158,8 +249,9 @@
                 height: 0;
                 border-left: 6px solid transparent;
                 border-right: 6px solid transparent;
-                border-top: 6px solid #a1e3f9;
+                border-top: 6px solid var(--primary-light);
                 pointer-events: none;
+                z-index: 1;
             }
             
             /* Rounded buttons styling */
@@ -390,15 +482,21 @@
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="use_elevenlabs" name="use_elevenlabs">
-                                            <label class="custom-control-label" for="use_elevenlabs">Use ElevenLabs Voice</label>
+                                            <label class="custom-control-label" for="use_elevenlabs">Use ChatterBox Voice</label>
                                         </div>
-                                        <small class="form-text text-muted">Enable premium voice quality with ElevenLabs</small>
-                                    </div>
-                                    
-                                    <div class="form-group" id="voice_id_group" style="display:none;">
-                                        <label for="voice_id">Select Voice</label>
-                                        <div class="select-wrapper">
-                                            <select class="form-control" id="voice_id" name="voice_id"></select>
+                                        <small class="form-text text-muted">Enable premium voice quality with ChatterBox</small>
+                                    </div>                                    <div class="form-group" id="voice_id_group" style="display:none;">
+                                        <label>Select Voice</label>
+                                        <div class="voice-options">
+                                            <div class="voice-option">
+                                                <input type="radio" name="voice_id" value="IKne3meq5aSn9XLyUdCD" id="voice_charlie">
+                                                <label for="voice_charlie">Charlie: Male, Australian, Middle-aged, Natural</label>
+                                            </div>
+                                            
+                                            <div class="voice-option">
+                                                <input type="radio" name="voice_id" value="cgSgspJ2msm6clMCkdW9" id="voice_jessica">
+                                                <label for="voice_jessica">Jessica: Female, American, Young, Expressive</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -425,75 +523,38 @@
             }
             
             const ELEVENLABS_VOICE_IDS = {
-                "Adam: Male, American, Middle-aged, Deep": "pNInz6obpgDQGcFmaJgB",
-                "Alice: Female, British, Middle-aged, Confident": "Xb7hH8MSUJpSbSDYk0k2",
-                "Antoni: Male, American, Young, Well-rounded": "ErXwobaYiN019PkySvjV",
-                "Arnold: Male, American, Middle-aged, Crisp": "VR6AewLTigWG4xSOukaG",
-                "Bill: Male, American, Old, Trustworthy": "pqHfZKP75CvOlQylNhV4",
-                "Brian: Male, American, Middle-aged, Deep": "nPczCjzI2devNBz1zQrb",
-                "Callum: Male, Transatlantic, Middle-aged, Intense": "N2lVS1w4EtoT3dr4eOWO",
                 "Charlie: Male, Austrailian, Middle-aged, Natural": "IKne3meq5aSn9XLyUdCD",
-                "Charlotte: Female, Swedish, Young, Seductive": "XB0fDUnXU5powFXDhCwa",
-                "Chris: Male, American, Middle-aged, Casual": "iP95p4xoKVk53GoZ742B",
-                "Clyde: Male, American, Middle-aged, War veteran": "2EiwWnXFnvU5JabPnv8n",
-                "Daniel: Male, British, Middle-aged, Authoritative": "onwK4e9ZLuTAKqWW03F9",
-                "Dave: Male, British, Young, Conversational": "CYw3kZ02Hs0563khs1Fj",
-                "Domi: Female, American, Young, Strong": "AZnzlk1XvdvUeBnXmlld",
-                "Dorothy: Female, British, Young, Pleasant": "ThT5KcBeYPX3keUQqHPh",
-                "Drew: Male, American, Middle-aged, Well-rounded": "29vD33N1CtxCmqQRPOHJ",
-                "Elli: Female, American, Young, Emotional": "MF3mGyEYCl7XYWbV9V6O",
-                "Emily: Female, American, Young, Calm": "LcfcDJNUP1GQjkzn1xUU",
-                "Eric: Male, American, Middle-aged, Friendly": "cjVigY5qzO86Huf0OWal",
-                "Ethan: Male, American, Young, Soft": "g5CIjZEefAph4nQFvHAz",
-                "Fin: Male, Irish, Old, Sailor": "D38z5RcWu1voky8WS1ja",
-                "Freya: Female, American, Young, Expressive": "jsCqWAovK2LkecY7zXl4",
-                "George: Male, British, Middle-aged, Warm": "JBFqnCBsd6RMkjVDRZzb",
-                "Gigi: Female, American, Young, Childish": "jBpfuIE2acCO8z3wKNLl",
-                "Giovanni: Male, Italian, Young, Foreigner": "zcAOhNBS3c14rBihAFp1",
-                "Glinda: Female, American, Middle-aged, Witch": "z9fAnlkpzviPz146aGWa",
-                "Grace: Female, American (South), Young, Pleasant": "oWAxZDx7w5VEj9dCyTzz",
-                "Harry: Male, American, Young, Anxious": "SOYHLrjzK2X1ezoPC6cr",
-                "James: Male, Australian, Old, Calm": "ZQe5CZNOzWyzPSCn5a3c",
-                "Jeremy: Male, Irish, Young, Excited": "bVMeCyTHy58xNoL34h3p",
+
+
                 "Jessica: Female, American, Young, Expressive": "cgSgspJ2msm6clMCkdW9",
-                "Jessie: Male, American, Old, Raspy": "t0jbNlBVZ17f02VDIeMI",
-                "Joseph: Male, British, Middle-aged, Articulate": "Zlb1dXrM653N07WRdFW3",
-                "Josh: Male, American, Young, Deep": "TxGEqnHWrfWFTfGW9XjX",
-                "Laura: Female, American, Young, Upbeat": "FGY2WhTYpPnrIDTdsKH5",
-                "Liam: Male, American, Young, Articulate": "TX3LPaxmHKxFdv7VOQHJ",
-                "Lily: Female, British, Middle-aged, Warm": "pFZP5JQG7iQjIQuC4Bku",
-                "Matilda: Female, American, Middle-aged, Friendly": "XrExE9yKIg1WjnnlVkGX",
-                "Michael: Male, American, Old, Calm": "flq6f7yk4E4fJM5XTYuZ",
-                "Mimi: Female, Swedish, Young, Childish": "zrHiDhphv9ZnVXBqCLjz",
-                "Nicole: Female, American, Young, Soft": "piTKgcLEGmPE4e6mEKli",
-                "Patrick: Male, American, Middle-aged, Shouty": "ODq5zmih8GrVes37Dizd",
-                "Paul: Male, American, Middle-aged, Authoritative": "5Q0t7uMcjvnagumLfvZi",
-                "Rachel: Female, American, Young, Calm": "21m00Tcm4TlvDq8ikWAM",
-                "Sam: Male, American, Young, Raspy": "yoZ06aMxZJJ28mfd3POQ",
-                "Sarah: Female, American, Young, Soft": "EXAVITQu4vr4xnSDxMaL",
-                "Serena: Female, American, Middle-aged, Pleasant": "pMsXgVXv3BLzUgSXRplE",
-                "Thomas: Male, American, Young, Calm": "GBv7mTt0atIp3Br8iCZE",
-                "Will: Male, American, Young, Friendly": "bIHbv24MWmeRgasZH58o",
-            };
-
-            const voiceSelect = document.getElementById('voice_id');
-
-            // Populate voice options
-            for (const [name, id] of Object.entries(ELEVENLABS_VOICE_IDS)) {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = name;
-                voiceSelect.appendChild(option);
-            }
-
-            // Toggle voice ID select visibility based on checkbox
+                  };            // Toggle voice ID select visibility based on checkbox
             document.getElementById("use_elevenlabs").addEventListener("change", function() {
                 var voiceIdGroup = document.getElementById("voice_id_group");
                 if (this.checked) {
                     voiceIdGroup.style.display = "block";
                 } else {
                     voiceIdGroup.style.display = "none";
+                    // Clear any selected voice when hiding
+                    const voiceRadios = document.querySelectorAll('input[name="voice_id"]');
+                    voiceRadios.forEach(radio => {
+                        radio.checked = false;
+                        radio.closest('.voice-option').classList.remove('selected');
+                    });
                 }
+            });
+            
+            // Add visual feedback for voice selection
+            document.querySelectorAll('input[name="voice_id"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.voice-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    // Add selected class to current option
+                    if (this.checked) {
+                        this.closest('.voice-option').classList.add('selected');
+                    }
+                });
             });
             
             // Show/hide the information collection notice based on selection
@@ -525,11 +586,10 @@
                         color: '#fff'
                     });
                     return;
-                }
-
-                // Process voice selection
+                }                // Process voice selection
                 const useElevenlabs = document.getElementById("use_elevenlabs").checked;
-                const voiceIdInput = document.getElementById("voice_id").value.trim();
+                const selectedVoiceRadio = document.querySelector('input[name="voice_id"]:checked');
+                const voiceIdInput = selectedVoiceRadio ? selectedVoiceRadio.value : "";
 
                 if (useElevenlabs && Object.values(ELEVENLABS_VOICE_IDS).includes(voiceIdInput)) {
                     const voiceName = Object.keys(ELEVENLABS_VOICE_IDS).find(key => ELEVENLABS_VOICE_IDS[key] === voiceIdInput);
@@ -537,7 +597,7 @@
                     
                     Swal.fire({
                         icon: 'success',
-                        title: 'ElevenLabs Voice Enabled',
+                        title: 'ChatterBox Voice Enabled',
                         html: `<p>The selected voice <strong>"${name}"</strong> will be used.</p>
                               <p>Creating your agent...</p>`,
                         showConfirmButton: false,

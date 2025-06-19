@@ -13,7 +13,6 @@ import time
 #from utils.logger import log_response_time, print_info, print_error, print_warning
 load_dotenv()
 
-
 TIMING = int(os.environ.get("TIMING", 0))
 TIMING_PATH = os.environ.get("TIMING_PATH", "times.csv")
 
