@@ -2,6 +2,11 @@
 
 This project allows you to interact with a powerful voice-driven chatbot named **autoengage**.
 
+## Demo
+
+[Watch the demo video on Loom](https://www.loom.com/share/f54f4016a4df4bb3935d14a2054a6c54?sid=2b347ccc-103b-47dc-a398-db7053a9f8eav)
+
+
 ## Project Setup
 
 autoengage relies on several external libraries to function. To simplify the process, a handy `setup.sh` script automates the installation. Follow these steps to get autoengage up and running:
